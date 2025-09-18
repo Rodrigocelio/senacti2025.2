@@ -5,14 +5,14 @@ def mostrar_menu():
     print("\n=== Sistema de Cadastro de Clientes - Barbearia ===")
     print("1. Cadastrar cliente")
     print("2. Listar clientes")
-    print("3. Buscar cliente por nome")
-    print("4. Sair")
+    print("0. Sair")
 
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente."""
     nome = input("Digite o nome do cliente: ")
     telefone = input("Digite o telefone do cliente: ")
     email = input("Digite o email do cliente: ")
+    """Dicionário para o cliente."""
     cliente = {
         "nome": nome,
         "telefone": telefone,
@@ -29,30 +29,30 @@ def listar_clientes(clientes):
         return
 
     print("\nLista de clientes cadastrados:")
-    
-    # 1. Inicializa o contador antes do laço
+
+    """ 1. Inicializa o contador antes do laço """
     numero_cliente = 1
-    
-    # 2. Faz um laço simples pela lista de clientes
+
+    """ 2. Faz um laço simples pela lista de clientes """
     for cliente in clientes:
-        # 3. Usa a variável do contador no print
+        """ 3. Usa a variável do contador no print """
         print(f"{numero_cliente}. Nome: {cliente['nome']}, Telefone: {cliente['telefone']}, Email: {cliente['email']}")
-        
-        # 4. Incrementa o contador para a próxima volta
+
+        """ 4. Incrementa o contador para a próxima volta """
         numero_cliente += 1
 
 
 def main():
     """Função principal do sistema."""
-    clientes = []
-    while True:
+    clientes = [] 
+    while True: 
         mostrar_menu()
         opcao = input("Escolha uma opção: ")
         if opcao == "1":
             cadastrar_cliente(clientes)
         elif opcao == "2":
             listar_clientes(clientes)
-        elif opcao == "4":
+        elif opcao == "0":
             print("Saindo do sistema. Até mais!")
             break
         else:
