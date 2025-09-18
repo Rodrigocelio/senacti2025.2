@@ -7,3 +7,4 @@ def mostrar_menu():
     print("4. Sair")
 
 # função para declarar variáveis
+# Adicione as variáveis aqui
