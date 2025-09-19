@@ -6,6 +6,7 @@ Sistema simples em Python para cadastro e listagem de clientes de barbearia.
 
 - Cadastrar novos clientes (nome, telefone, email)
 - Listar todos os clientes cadastrados
+- Buscar por usuário por nome
 - Interface de menu interativo
 
 ## Como usar
