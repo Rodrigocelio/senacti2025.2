@@ -58,14 +58,10 @@ def identificar_opt():
             break
 
 
-def logar():
+def logar(usuario, senha):
     """Verifica se o usuário é um 'adm' do sistema."""
     
     adm = {'usuario': 'petter', 'senha': '111111'}
-
-    print("#" * 30 + " Login " + "#" * 30)
-    usuario = str(input("Usuário: "))
-    senha = str(input("Senha: "))
 
     # dessa forma fica mais eficiente.
     if usuario == adm['usuario']:
@@ -75,17 +71,24 @@ def logar():
 
 
 def main():
-    # Execução do programa.
+    """Execução do sistema."""
+    
+    # abre o programa com uma barra de carregamento.
     mostrar_barra_carregamento()
 
+    # coleta e verifica se usuario e senha estão na base de dados.
     while True:
         time.sleep(0.5)
         system('clear')
-        if logar() == 0:
+        print("#" * 30 + " Login " + "#" * 30)
+        usuario = str(input("Usuário: "))
+        senha = str(input("Senha: "))
+
+        if logar(usuario, senha) == 0:
             print("\nUsuário ou senha inválido.\nTENTE NOVAMENTE!")
             time.sleep(1)
             continue
-        print("Entrando...")
+        print("\nEntrando...")
         break
     
     time.sleep(1)
