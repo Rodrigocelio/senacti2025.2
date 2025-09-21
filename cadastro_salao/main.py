@@ -2,16 +2,6 @@ from os import system
 import time
 
 
-# funcao para exibir o menu
-def mostrar_menu():
-    """Cria e mostra um menu com as opções possíveis ao usuário."""
-    print("\n=== Sistema de Cadastro de Clientes - Barbearia ===")
-    print("1. Cadastrar cliente")
-    print("2. Listar clientes")
-    print("3. Buscar cliente por nome")
-    print("4. Sair")
-
-
 def mostrar_menu():
     """A função mostra um menu com as possivés opções."""
     print("\n==== Sistema de Cadastro de Clientes - Barbearia ====")
@@ -68,7 +58,44 @@ def identificar_opt():
             break
 
 
-# Execução do programa.
-mostrar_barra_carregamento()
-mostrar_menu()
-identificar_opt()
+def logar(usuario, senha):
+    """Verifica se o usuário é um 'adm' do sistema."""
+    
+    adm = {'usuario': 'petter', 'senha': '111111'}
+
+    # dessa forma fica mais eficiente.
+    if usuario == adm['usuario']:
+        if senha == adm['senha']:
+            return 1
+    return 0
+
+
+def main():
+    """Execução do sistema."""
+    
+    # abre o programa com uma barra de carregamento.
+    mostrar_barra_carregamento()
+
+    # coleta e verifica se usuario e senha estão na base de dados.
+    while True:
+        time.sleep(0.5)
+        system('clear')
+        print("#" * 30 + " Login " + "#" * 30)
+        usuario = str(input("Usuário: "))
+        senha = str(input("Senha: "))
+
+        if logar(usuario, senha) == 0:
+            print("\nUsuário ou senha inválido.\nTENTE NOVAMENTE!")
+            time.sleep(1)
+            continue
+        print("\nEntrando...")
+        break
+    
+    time.sleep(1)
+    system('clear')
+    mostrar_menu()
+
+    identificar_opt()
+
+
+main()
