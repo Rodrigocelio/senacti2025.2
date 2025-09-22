@@ -27,4 +27,6 @@ def main():
             pass
 
 
-main()
+# Executa o sistema
+if __name__ == "__main__":
+    main()
