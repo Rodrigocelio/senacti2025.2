@@ -48,8 +48,7 @@ def logar(usuario, senha):
 
 
 def cadastrar_cliente():
-    """Cadastra um novo cliente."""
-    
+    """Cadastra um novo cliente.""" 
     print("="*25, " Cadastrar clinte ", "="*25)
     nome = input("Nome do cliente: ").title()
     telefone = input("Telefone do cliente: ")
@@ -67,24 +66,22 @@ def cadastrar_cliente():
 
 
 def listar_clientes():
-    """Lista todos os clientes com um contador manual."""
-
+    """Lista todos os clientes utilizando enumerate para contar todos."""
     if not clientes:
         print("Nenhum cliente cadastrado.")
         sleep(3)
         return
     print("")
-    print("-"*30, "Lista de clientes cadastrados", "-"*30)
+    print("-"*45, "Lista de clientes cadastrados", "-"*45)
 
     # Desconpacta o index e os dados do cliente
     for n_cliente, cliente in enumerate(clientes):
         # n_cliente é acrescido de 1 porque o index começa em 0.
-        print(f"{n_cliente+1} -: Nome: {cliente['nome']} | Telefone: {cliente ['telefone']} | Email: {cliente['email']}")
+        print(f"{n_cliente+1:>4} -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
 
 
 def main():
-    """Fluxo de execução de todo sistema."""
-    
+    """Fluxo de execução de todo sistema."""    
     mostrar_barra_carregamento()
     
     # login
