@@ -23,9 +23,9 @@ def mostrar_barra_carregamento():
     barra = ""
     progresso = ""
 
-    for i in range(100):
+    for i in range(25):
         print("INICIANDO, POR FAVOR AGUARDE.".center(102))
-        barra += "/"
+        barra += "////"
         print("."*102)
         print(barra)
         print("."*102)
