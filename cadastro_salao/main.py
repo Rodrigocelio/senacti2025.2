@@ -1,7 +1,6 @@
 import os
 from time import sleep
 
-clientes = []
 
 def limpar_tela():
     """Limpa a tela do console de forma multiplataforma."""
@@ -40,14 +39,15 @@ def logar(usuario, senha):
     adm = {'usuario': 'salinas', 
            'senha': '123'}
 
-    # dessa forma fica mais eficiente.
+    # Verifica se existe um usuário com o nome especificado
+    # caso exista, verifica se a senha está atrelada ao nome especificado.
     if usuario == adm['usuario']:
         if senha == adm['senha']:
             return 1
         return 0
 
 
-def cadastrar_cliente():
+def cadastrar_cliente(clientes):
     """Cadastra um novo cliente.""" 
     print("="*25, " Cadastrar clinte ", "="*25)
     nome = input("Nome do cliente: ").title()
@@ -65,7 +65,7 @@ def cadastrar_cliente():
     print(f"\nCliente {nome.capitalize()} cadastrado com sucesso!")
 
 
-def listar_clientes():
+def listar_clientes(clientes):
     """Lista todos os clientes utilizando enumerate para contar todos."""
     if not clientes:
         print("Nenhum cliente cadastrado.")
@@ -82,6 +82,9 @@ def listar_clientes():
 
 def main():
     """Fluxo de execução de todo sistema."""    
+    
+    clientes = []
+
     mostrar_barra_carregamento()
     
     # login
@@ -116,10 +119,10 @@ def main():
             break
         if opt == "1":
             limpar_tela()
-            cadastrar_cliente()
+            cadastrar_cliente(clientes)
         elif opt == "2":
             limpar_tela()
-            listar_clientes()
+            listar_clientes(clientes)
             # Arranjo tecnico para FRISAR a tela na listagem dos clientes
             # caso contrario 'limpar_tela' não deixaria exibir.
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
