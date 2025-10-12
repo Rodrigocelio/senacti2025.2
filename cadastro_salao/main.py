@@ -4,6 +4,7 @@ from time import sleep
 from pyfiglet import Figlet
 from rich.console import Console
 from rich.panel import Panel
+from rich.text import Text
 
 
 # ------ Área de componentes
@@ -36,16 +37,16 @@ def mostrar_titulo_personalizado():
 
 def mostrar_barra_carregamento():
     """Mostra uma barra de carregamento para iniciar o programa."""
-    console = Console()
     barra = ""
-    progresso = ""
+
+    console = Console()
 
     for i in range(45):
         mostrar_titulo_personalizado()
-        barra += "////"
-        # A barra de carregamento será renderizada para a  cor verde. 
-        console.print(Panel(barra, style="red"))
-        progresso = " " + str(len(barra)) + "% "
+        barra += "///"
+        # A barra de carregamento será renderizada para a cor verde. 
+        painel = Panel.fit(barra, style="green")
+        console.print(painel)
         sleep(.1)
         limpar_tela()
 
