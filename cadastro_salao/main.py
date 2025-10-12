@@ -1,8 +1,12 @@
+# ------ Área de importação
 import os
 from time import sleep
 from pyfiglet import Figlet
+from rich.console import Console
+from rich.panel import Panel
 
 
+# ------ Área de componentes
 def limpar_tela():
     """Limpa a tela do console de forma multiplataforma."""
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -18,26 +22,30 @@ def mostrar_menu():
     print("4. Sair\n")
 
 
-def mostrar_titulo():
-    """Renderiza um texto simples em uma ASCII Art."""
+def mostrar_titulo_personalizado():
+    """Renderiza um texto simples em uma ASCII Art e altera a cor para uma especificada.
+    """
+    console = Console()
     render = Figlet()
-    print(render.renderText("= BarbeBack ="))
-
+    # Renderiza e cria um painel com o título.
+    titulo_renderizado = render.renderText("= BarbeBack =") 
+    painel = Panel(titulo_renderizado)
+    
+    console.print(painel, style="red")
+                       
 
 def mostrar_barra_carregamento():
     """Mostra uma barra de carregamento para iniciar o programa."""
+    console = Console()
     barra = ""
     progresso = ""
 
-    for i in range(50):
-        mostrar_titulo()
-        barra += "//"
-        print("."*102)
-        print(barra)
-        print("."*102)
+    for i in range(45):
+        mostrar_titulo_personalizado()
+        barra += "////"
+        # A barra de carregamento será renderizada para a  cor verde. 
+        console.print(Panel(barra, style="red"))
         progresso = " " + str(len(barra)) + "% "
-        print(progresso.center(102, "-"))
-        print("INICIANDO, POR FAVOR AGUARDE.".center(102))
         sleep(.1)
         limpar_tela()
 
@@ -105,6 +113,7 @@ def buscar_clientes(clientes):
         print(f"\nNenhum cliente com o nome '{nome_busca}' foi encontrado.")
 
 
+# ----- Área de execução
 def main():
     """Fluxo de execução de todo sistema."""    
     
@@ -114,7 +123,7 @@ def main():
     
     # login
     while True:
-        mostrar_titulo()
+        mostrar_titulo_personalizado()
         print("-"*30 + " Login " + "-"*30)
         usuario = str(input("Usuário: "))
         senha = str(input("Senha: "))
@@ -131,7 +140,7 @@ def main():
         
     # loop principal
     while True:
-        mostrar_titulo()
+        mostrar_titulo_personalizado()
         mostrar_menu()
         print("-"*20)
         try:
@@ -146,11 +155,11 @@ def main():
             break
         if opt == "1":
             limpar_tela()
-            mostrar_titulo()
+            mostrar_titulo_personalizado()
             cadastrar_cliente(clientes)
         elif opt == "2":
             limpar_tela()
-            mostrar_titulo()
+            mostrar_titulo_personalizado()
             listar_clientes(clientes)
             # Arranjo tecnico para FRISAR a tela na listagem dos clientes
             # caso contrario 'limpar_tela' não deixaria exibir.
@@ -159,7 +168,7 @@ def main():
                 continue
         elif opt == "3":
             limpar_tela()
-            mostrar_titulo()
+            mostrar_titulo_personalizado()
             buscar_clientes(clientes)
         elif opt == "4":
             print("\nEncerando o programa...")
