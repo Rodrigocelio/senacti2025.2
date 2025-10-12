@@ -1,5 +1,6 @@
 import os
 from time import sleep
+from pyfiglet import Figlet
 
 
 def limpar_tela():
@@ -9,27 +10,34 @@ def limpar_tela():
 
 def mostrar_menu():
     """A função mostra um menu com as possivés opções."""
-    print("\n==== Sistema de Cadastro de Clientes - Barbearia ====")
+    print()
+    print("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11)
     print("1. Cadastrar cliente")
     print("2. Listar clientes")
     print("3. Buscar cliente por nome")
     print("4. Sair\n")
 
 
-# TODO: Simplificar esse código usando uma função recursiva.
+def mostrar_titulo():
+    """Renderiza um texto simples em uma ASCII Art."""
+    render = Figlet()
+    print(render.renderText("= BarbeBack ="))
+
+
 def mostrar_barra_carregamento():
     """Mostra uma barra de carregamento para iniciar o programa."""
     barra = ""
     progresso = ""
 
-    for i in range(25):
-        print("INICIANDO, POR FAVOR AGUARDE.".center(102))
-        barra += "////"
+    for i in range(50):
+        mostrar_titulo()
+        barra += "//"
         print("."*102)
         print(barra)
         print("."*102)
         progresso = " " + str(len(barra)) + "% "
         print(progresso.center(102, "-"))
+        print("INICIANDO, POR FAVOR AGUARDE.".center(102))
         sleep(.1)
         limpar_tela()
 
@@ -49,8 +57,8 @@ def logar(usuario, senha):
 
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente.""" 
-    print("="*25, " Cadastrar clinte ", "="*25)
-    nome = input("Nome do cliente: ").title()
+    print("-"*25, " Cadastrar clinte ", "-"*25)
+    nome = input("Nome do cliente: ").lower()
     telefone = input("Telefone do cliente: ")
     email = input("E-mail do cliente: ").lower()
     
@@ -75,9 +83,26 @@ def listar_clientes(clientes):
     print("-"*45, "Lista de clientes cadastrados", "-"*45)
 
     # Desconpacta o index e os dados do cliente
-    for n_cliente, cliente in enumerate(clientes):
-        # n_cliente é acrescido de 1 porque o index começa em 0.
-        print(f"{n_cliente+1:>4} -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
+    for n_cliente, cliente in enumerate(clientes, 1):
+        print(f"{n_cliente:>4} -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
+
+
+def buscar_clientes(clientes):
+    """Busca clientes por nome em uma lista e exibe os resultados."""
+    print("-"*67)
+    nome_busca = input("Digite o nome do cliente que deseja buscar: ")
+
+    # Filtra a lista de clientes para encontrar nomes que contenham o termo de busca
+    resultados = [cliente for cliente in clientes if nome_busca in cliente['nome']]
+
+    print(f"\n--- Resultados da busca por '{nome_busca}' ---")
+
+    if resultados:
+        for i, cliente in enumerate(resultados, 1):
+            print(f"{i}. Nome: {cliente['nome']}, Telefone: {cliente['telefone']}, Email: {cliente['email']}")
+        print("-"*50)
+    else:
+        print(f"\nNenhum cliente com o nome '{nome_busca}' foi encontrado.")
 
 
 def main():
@@ -89,7 +114,8 @@ def main():
     
     # login
     while True:
-        print("+"*30 + " Login " + "+"*30)
+        mostrar_titulo()
+        print("-"*30 + " Login " + "-"*30)
         usuario = str(input("Usuário: "))
         senha = str(input("Senha: "))
         # verifica se login é válido.
@@ -105,6 +131,7 @@ def main():
         
     # loop principal
     while True:
+        mostrar_titulo()
         mostrar_menu()
         print("-"*20)
         try:
@@ -119,9 +146,11 @@ def main():
             break
         if opt == "1":
             limpar_tela()
+            mostrar_titulo()
             cadastrar_cliente(clientes)
         elif opt == "2":
             limpar_tela()
+            mostrar_titulo()
             listar_clientes(clientes)
             # Arranjo tecnico para FRISAR a tela na listagem dos clientes
             # caso contrario 'limpar_tela' não deixaria exibir.
@@ -129,7 +158,9 @@ def main():
                 limpar_tela()
                 continue
         elif opt == "3":
-            pass
+            limpar_tela()
+            mostrar_titulo()
+            buscar_clientes(clientes)
         elif opt == "4":
             print("\nEncerando o programa...")
             sleep(1.5)
