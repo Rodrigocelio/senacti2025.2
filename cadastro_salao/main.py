@@ -1,13 +1,13 @@
-# ------ Área de importação
 import os
 from time import sleep
 from pyfiglet import Figlet
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 
 
-# ------ Área de componentes
+console = Console()
+
+
 def limpar_tela():
     """Limpa a tela do console de forma multiplataforma."""
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -15,23 +15,20 @@ def limpar_tela():
 
 def mostrar_menu():
     """A função mostra um menu com as possivés opções."""
-    print()
-    print("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11)
-    print("1. Cadastrar cliente")
-    print("2. Listar clientes")
-    print("3. Buscar cliente por nome")
-    print("4. Sair\n")
+    console.print(Panel.fit("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11), style="red")
+
+    menu = """1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair"""
+    # Cria uma saida mais elegante.
+    console.print(Panel.fit(menu), style="red", justify="left")
 
 
 def mostrar_titulo_personalizado():
     """Renderiza um texto simples em uma ASCII Art e altera a cor para uma especificada.
     """
-    console = Console()
     render = Figlet()
     # Renderiza e cria um painel com o título.
     titulo_renderizado = render.renderText("= BarbeBack =") 
     painel = Panel(titulo_renderizado)
-    
     console.print(painel, style="red")
                        
 
@@ -39,34 +36,31 @@ def mostrar_barra_carregamento():
     """Mostra uma barra de carregamento para iniciar o programa."""
     barra = ""
 
-    console = Console()
-
-    for i in range(45):
+    for i in range(32):
         mostrar_titulo_personalizado()
-        barra += "///"
-        # A barra de carregamento será renderizada para a cor verde. 
-        painel = Panel.fit(barra, style="green")
-        console.print(painel)
+        barra += "//"
+        # A barra de carregamento será renderizada para a cor verde.
+        painel = Panel.fit(barra) 
+        console.print(painel, style="green")
         sleep(.1)
         limpar_tela()
 
 
 def logar(usuario, senha):
     """Verifica se o usuário é um 'adm' do sistema.""" 
+
+    # Armazena o usuário e senha capaz de logar no sistema.
     adm = {'usuario': 'salinas', 
            'senha': '123'}
-
-    # Verifica se existe um usuário com o nome especificado
-    # caso exista, verifica se a senha está atrelada ao nome especificado.
-    if usuario == adm['usuario']:
-        if senha == adm['senha']:
+    # Verifica se existe o usuário e senha estão salvos.    
+    if usuario == adm['usuario'] and senha == adm['senha']:
             return 1
-        return 0
+    return 0
 
-
+# Adicionar tratamento de exceções.
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente.""" 
-    print("-"*25, " Cadastrar clinte ", "-"*25)
+    console.print(Panel.fit("-"*25 + " Cadastrar clinte " + "-"*25), style="red")
     nome = input("Nome do cliente: ").lower()
     telefone = input("Telefone do cliente: ")
     email = input("E-mail do cliente: ").lower()
@@ -89,7 +83,7 @@ def listar_clientes(clientes):
         sleep(3)
         return
     print("")
-    print("-"*45, "Lista de clientes cadastrados", "-"*45)
+    console.print(Panel.fit("-"*45 + " Lista de clientes cadastrados " + "-"*45), style="red")
 
     # Desconpacta o index e os dados do cliente
     for n_cliente, cliente in enumerate(clientes, 1):
@@ -98,11 +92,11 @@ def listar_clientes(clientes):
 
 def buscar_clientes(clientes):
     """Busca clientes por nome em uma lista e exibe os resultados."""
-    print("-"*67)
-    nome_busca = input("Digite o nome do cliente que deseja buscar: ")
+    console.print(Panel.fit("-"*25 + " Buscar cliente por nome " + "-"*25), style="red")
+    nome_busca = str(input("Digite o nome do cliente que deseja buscar: ")).lower()
 
     # Filtra a lista de clientes para encontrar nomes que contenham o termo de busca
-    resultados = [cliente for cliente in clientes if nome_busca in cliente['nome']]
+    resultados = [cliente for cliente in clientes if nome_busca == cliente['nome']]
 
     print(f"\n--- Resultados da busca por '{nome_busca}' ---")
 
@@ -114,18 +108,80 @@ def buscar_clientes(clientes):
         print(f"\nNenhum cliente com o nome '{nome_busca}' foi encontrado.")
 
 
-# ----- Área de execução
+# TODO: A função deverá verificar o usuário já está cadastrado.
+def criar_agendamento(agendamentos):
+    """"""
+    print("\n --- Novo Agendamento ---")
+    try:
+        nome = str(input("Nome do Cliente: "))
+        telefone = str(input("Telefone: "))
+        data = str(input("Data (DD/MM/AAAA): "))
+        hora = str(input("Hora (HH:MM): "))
+        barbeiro = str(input("Barbeiro responsavel: "))
+        servico = str(input("Serviço (ex.corte,barba,...)"))
+
+        #Dicionario do agendamento
+        agendamento = {
+            "nome": nome,
+            "telefone": telefone,
+            "data": data,
+            "hora": hora,
+            "barbeiro": barbeiro,
+            "servico": servico}
+        agendamentos.append(agendamento)
+
+        print(f"\n ✅ Agendamento confirmado para {nome} em {data} ás {hora} com {barbeiro}.")
+    except Exception as erro:
+        print(f"Erro ao cadastrar: {erro}")
+
+
+def listar_agendamentos(agendamentos):
+    """"""
+    print("\n--- Lista de Agendamentos ---\n")
+    try:
+      if not agendamentos:
+        print("Nenhum Agendamento Encontrado.")
+      else:
+        for n, agendamento in enumerate(agendamentos, 1):
+          print(f"{n:>6}º {agendamento['nome']:<20} | {agendamento['data']:<20} | {agendamento['hora']:<20} | {agendamento['barbeiro']:<20} [{agendamento['servico']:<20}]")
+    except Exception as erro:
+        print(f" Ocorreu um erro ao listar os agendamentos: {erro}")
+
+
+def buscar_agendamento(agendamentos):
+    """"""
+    print(f"\n --- Buscar Agendamentos ---")
+    try:
+        nome = str(input("Digite nome do cliente: "))
+
+        encontrados = [a for a in agendamentos if a['nome'].lower() == nome.lower()]
+
+        if encontrados:
+            for a in encontrados:
+                print(f"\ncliente: {a["nome"]}")
+                print(f"Telefone: {a["telefone"]}")
+                print(f"data: {a["data"]} hora: {a["hora"]}")
+                print(f"barbeiro: {a["barbeiro"]}")
+                print(f"servico: {a["servico"]}")
+        else:
+            print("Nenhum agendamento encontrado para esse nome.")
+    except Exception as erro:
+        print(f" Ocorreu um erro ao buscar agendamento: {erro}")
+
+
 def main():
     """Fluxo de execução de todo sistema."""    
-    
+
+    # Estrutura onde ficam armazenados os dados dos clientes.
     clientes = []
+    agendamentos = []
 
     mostrar_barra_carregamento()
     
     # login
     while True:
         mostrar_titulo_personalizado()
-        print("-"*30 + " Login " + "-"*30)
+        console.print(Panel.fit("-"*30 + " Login " + "-"*30), style="red")   
         usuario = str(input("Usuário: "))
         senha = str(input("Senha: "))
         # verifica se login é válido.
@@ -143,41 +199,75 @@ def main():
     while True:
         mostrar_titulo_personalizado()
         mostrar_menu()
-        print("-"*20)
+        console.print("-"*13, style="red")
         try:
             opt = str(input(">>> "))
         # Encerra o programa de forma elegante caso o usuário 
         # tecle 'ctrl + c'.
-        except KeyboardInterrupt as erro:
+        except KeyboardInterrupt:
             print("\nEncerando o programa...")
             sleep(1.5)
             print("\nPrograma interrupido abruptamente.")
             print("Por favor execute novamente.")
             break
+        # Abre a telinha para cadastrar cliente.
         if opt == "1":
             limpar_tela()
             mostrar_titulo_personalizado()
             cadastrar_cliente(clientes)
+        # Mostra um relatório com todos os clientes cadastrados.
         elif opt == "2":
             limpar_tela()
             mostrar_titulo_personalizado()
             listar_clientes(clientes)
-            # Arranjo tecnico para FRISAR a tela na listagem dos clientes
-            # caso contrario 'limpar_tela' não deixaria exibir.
+            # Congela a tela até que o usuário digite alguma coisa.
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
+        # Abre a telinha para buscar um cliente especifico.
         elif opt == "3":
             limpar_tela()
             mostrar_titulo_personalizado()
             buscar_clientes(clientes)
+            # Congela a tela até que o usuário digite alguma coisa
+            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+                limpar_tela()
+                continue
+        # Abre uma tela para criar um agendamento.
         elif opt == "4":
+            limpar_tela()
+            mostrar_titulo_personalizado()
+            criar_agendamento(agendamentos)
+            sleep(3)
+        # 
+        elif opt == "5":
+            limpar_tela()
+            mostrar_titulo_personalizado()
+            listar_agendamentos(agendamentos)
+            # Congela a tela até que o usuário digite alguma coisa
+            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+                limpar_tela()
+                continue
+        #
+        elif opt == "6":
+            limpar_tela()
+            mostrar_titulo_personalizado()
+            buscar_agendamento(agendamentos)
+            # Congela a tela até que o usuário digite alguma coisa
+            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+                limpar_tela()
+                continue
+        #
+        elif opt == "7":
+            pass
+        # Encerra o programa.
+        elif opt == "8":
             print("\nEncerando o programa...")
             sleep(1.5)
             break
         else:
-            print("""Opção inválida!
-                  Execute novamente.""")
+            # escrever o else corretamente.
+            pass
         limpar_tela()
 
 
