@@ -102,7 +102,7 @@ def buscar_clientes(clientes):
 
     if resultados:
         for i, cliente in enumerate(resultados, 1):
-            print(f"{i}. Nome: {cliente['nome']}, Telefone: {cliente['telefone']}, Email: {cliente['email']}")
+            print(f"{i:>6}. Nome: {cliente['nome']:<20}, Telefone: {cliente['telefone']:<20}, Email: {cliente['email']:<20}")
         print("-"*50)
     else:
         print(f"\nNenhum cliente com o nome '{nome_busca}' foi encontrado.")
@@ -153,20 +153,35 @@ def buscar_agendamento(agendamentos):
     print(f"\n --- Buscar Agendamentos ---")
     try:
         nome = str(input("Digite nome do cliente: "))
-
-        encontrados = [a for a in agendamentos if a['nome'].lower() == nome.lower()]
-
+        # Lista de compreesão para localizar o nome na lista de clientes.
+        encontrados = [agendamento for agendamento in agendamentos if agendamento['nome'].lower() == nome.lower()]
         if encontrados:
-            for a in encontrados:
-                print(f"\ncliente: {a["nome"]}")
-                print(f"Telefone: {a["telefone"]}")
-                print(f"data: {a["data"]} hora: {a["hora"]}")
-                print(f"barbeiro: {a["barbeiro"]}")
-                print(f"servico: {a["servico"]}")
+            for agendamento in encontrados:
+                print(f"\nCliente: {agendamento["nome"]}")
+                print(f"Telefone: {agendamento["telefone"]}")
+                print(f"Data: {agendamento["data"]}")
+                print(f"Hora: {agendamento["hora"]}")
+                print(f"Barbeiro: {agendamento["barbeiro"]}")
+                print(f"Servico: {agendamento["servico"]}")
         else:
             print("Nenhum agendamento encontrado para esse nome.")
     except Exception as erro:
         print(f" Ocorreu um erro ao buscar agendamento: {erro}")
+
+
+def cancelar_agendamento(agendamentos):
+  """"""
+  print(f"\n --- Cancelar Agendamento ---")
+  try:
+      nome = str(input("Digite o nome do cliente: "))
+      for i, a in enumerate(agendamentos):
+          if a["nome"].lower() == nome.lower():
+              cancelado = agendamentos.pop(i)
+              print(f'Agendamento com {cancelado['nome']} foi cancelado.')
+              return
+      print("Agendamento não encontrado.")
+  except Exception as erro:
+        print(f" Erro ao cancelar: {erro}")
 
 
 def main():
@@ -239,7 +254,7 @@ def main():
             mostrar_titulo_personalizado()
             criar_agendamento(agendamentos)
             sleep(3)
-        # 
+        # Mostra todos os agendamentos.
         elif opt == "5":
             limpar_tela()
             mostrar_titulo_personalizado()
@@ -248,7 +263,7 @@ def main():
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
-        #
+        # BIsca um agendamento especifico.
         elif opt == "6":
             limpar_tela()
             mostrar_titulo_personalizado()
@@ -257,9 +272,15 @@ def main():
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
-        #
+        # Cencela um agendamento.
         elif opt == "7":
-            pass
+            limpar_tela()
+            mostrar_titulo_personalizado()
+            cancelar_agendamento(agendamentos)
+            # Congela a tela até que o usuário digite alguma coisa
+            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+                limpar_tela()
+                continue
         # Encerra o programa.
         elif opt == "8":
             print("\nEncerando o programa...")
