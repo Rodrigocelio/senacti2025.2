@@ -1,8 +1,9 @@
 import os
 from time import sleep
-from pyfiglet import Figlet
+import pyfiglet
 from rich.console import Console
 from rich.panel import Panel
+from rich.text import Text
 
 
 console = Console()
@@ -13,37 +14,26 @@ def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def mostrar_menu():
-    """A função mostra um menu com as possivés opções."""
-    console.print(Panel.fit("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11), style="red")
+def mostrar_logo_personalizado():
+    """Renderiza a logo do programa em uma ASCII Art."""
+    logo = pyfiglet.figlet_format("  BarbeBack  ")
+    logo_centralizado = Text(logo, justify="center")
+    painel = Panel(logo_centralizado)
+    console.print(painel, style="gray30")
 
-    menu = """1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair"""
-    # Cria uma saida mais elegante.
-    console.print(Panel.fit(menu), style="red", justify="left")
-
-
-def mostrar_titulo_personalizado():
-    """Renderiza um texto simples em uma ASCII Art e altera a cor para uma especificada.
-    """
-    render = Figlet()
-    # Renderiza e cria um painel com o título.
-    titulo_renderizado = render.renderText("= BarbeBack =") 
-    painel = Panel(titulo_renderizado)
-    console.print(painel, style="red")
-                       
 
 def mostrar_barra_carregamento():
     """Mostra uma barra de carregamento para iniciar o programa."""
-    barra = ""
-
-    for i in range(32):
-        mostrar_titulo_personalizado()
-        barra += "//"
-        # A barra de carregamento será renderizada para a cor verde.
-        painel = Panel.fit(barra) 
-        console.print(painel, style="green")
+    progresso = ""
+    for p in range(50):
+        mostrar_logo_personalizado()
+        # Centraliza a barra, coloca no painel e mostra o painel.
+        progresso_centralizado = Text(progresso, justify="center")
+        painel = Panel(progresso_centralizado, title="Carregando, aguarde!")
+        console.print(painel, style="gray30")
         sleep(.1)
         limpar_tela()
+        progresso += "///"
 
 
 def logar(usuario, senha):
@@ -56,6 +46,16 @@ def logar(usuario, senha):
     if usuario == adm['usuario'] and senha == adm['senha']:
             return 1
     return 0
+
+
+def mostrar_menu():
+    """A função mostra um menu com as possivés opções."""
+    console.print(Panel.fit("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11), style="red")
+
+    menu = """1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair"""
+    # Cria uma saida mais elegante.
+    console.print(Panel.fit(menu), style="red", justify="left")
+
 
 # Adicionar tratamento de exceções.
 def cadastrar_cliente(clientes):
@@ -195,7 +195,7 @@ def main():
     
     # login
     while True:
-        mostrar_titulo_personalizado()
+        mostrar_logo_personalizado()
         console.print(Panel.fit("-"*30 + " Login " + "-"*30), style="red")   
         usuario = str(input("Usuário: "))
         senha = str(input("Senha: "))
@@ -212,7 +212,7 @@ def main():
         
     # loop principal
     while True:
-        mostrar_titulo_personalizado()
+        mostrar_logo_personalizado()
         mostrar_menu()
         console.print("-"*13, style="red")
         try:
@@ -228,12 +228,12 @@ def main():
         # Abre a telinha para cadastrar cliente.
         if opt == "1":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             cadastrar_cliente(clientes)
         # Mostra um relatório com todos os clientes cadastrados.
         elif opt == "2":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             listar_clientes(clientes)
             # Congela a tela até que o usuário digite alguma coisa.
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
@@ -242,7 +242,7 @@ def main():
         # Abre a telinha para buscar um cliente especifico.
         elif opt == "3":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             buscar_clientes(clientes)
             # Congela a tela até que o usuário digite alguma coisa
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
@@ -251,13 +251,13 @@ def main():
         # Abre uma tela para criar um agendamento.
         elif opt == "4":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             criar_agendamento(agendamentos)
             sleep(3)
         # Mostra todos os agendamentos.
         elif opt == "5":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             listar_agendamentos(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
@@ -266,7 +266,7 @@ def main():
         # BIsca um agendamento especifico.
         elif opt == "6":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             buscar_agendamento(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
@@ -275,7 +275,7 @@ def main():
         # Cencela um agendamento.
         elif opt == "7":
             limpar_tela()
-            mostrar_titulo_personalizado()
+            mostrar_logo_personalizado()
             cancelar_agendamento(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
             if type(input("\nAperte 'ENTER' para voltar: ")) == str:
