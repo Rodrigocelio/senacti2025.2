@@ -38,11 +38,10 @@ def mostrar_barra_carregamento():
 
 def logar(usuario, senha):
     """Verifica se o usuário é um 'adm' do sistema.""" 
-
     # Armazena o usuário e senha capaz de logar no sistema.
     adm = {'usuario': 'salinas', 
            'senha': '123'}
-    # Verifica se existe o usuário e senha estão salvos.    
+    # Verifica se existe o usuário está cadastrado. 
     if usuario == adm['usuario'] and senha == adm['senha']:
             return 1
     return 0
@@ -50,20 +49,19 @@ def logar(usuario, senha):
 
 def mostrar_menu():
     """A função mostra um menu com as possivés opções."""
-    console.print(Panel.fit("-"*11 + " Sistema de Cadastro de Clientes - Barbearia " + "-"*11), style="red")
-
-    menu = """1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair"""
-    # Cria uma saida mais elegante.
-    console.print(Panel.fit(menu), style="red", justify="left")
+    menu = """\n1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair\n"""
+    # Cria um painel com uma saida mais elegante.
+    painel = Panel.fit(menu, title="=== Sistema de Cadastro de Clientes - Barbearia ===")
+    console.print(painel, style="gray30", justify="left")
 
 
 # Adicionar tratamento de exceções.
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente.""" 
-    console.print(Panel.fit("-"*25 + " Cadastrar clinte " + "-"*25), style="red")
-    nome = input("Nome do cliente: ").lower()
-    telefone = input("Telefone do cliente: ")
-    email = input("E-mail do cliente: ").lower()
+    console.print(Panel("", title="Cadastrar Cliente"), style="gray30")
+    nome = input(" Nome do cliente: ").lower()
+    telefone = input(" Telefone do cliente: ")
+    email = input(" E-mail do cliente: ").lower()
     
     # Dicionário para o cliente.
     cliente = {
@@ -196,12 +194,12 @@ def main():
     # login
     while True:
         mostrar_logo_personalizado()
-        console.print(Panel.fit("-"*30 + " Login " + "-"*30), style="red")   
-        usuario = str(input("Usuário: "))
-        senha = str(input("Senha: "))
+        console.print(Panel("", title="Login", style="gray30"))
+        usuario = str(input(" Usuário: "))
+        senha = str(input(" Senha: "))
         # verifica se login é válido.
         if logar(usuario, senha) == 1:
-            print("\nEntrando...")
+            print("\n Entrando...")
             sleep(1)
             limpar_tela()
             break
@@ -214,16 +212,16 @@ def main():
     while True:
         mostrar_logo_personalizado()
         mostrar_menu()
-        console.print("-"*13, style="red")
+        #console.print("-"*13, style="red")
         try:
-            opt = str(input(">>> "))
+            opt = str(input(" >>> "))
         # Encerra o programa de forma elegante caso o usuário 
         # tecle 'ctrl + c'.
         except KeyboardInterrupt:
-            print("\nEncerando o programa...")
+            print("\n Encerando o programa...")
             sleep(1.5)
-            print("\nPrograma interrupido abruptamente.")
-            print("Por favor execute novamente.")
+            print("\n Programa interrupido abruptamente.")
+            print(" Por favor execute novamente.")
             break
         # Abre a telinha para cadastrar cliente.
         if opt == "1":
@@ -283,7 +281,7 @@ def main():
                 continue
         # Encerra o programa.
         elif opt == "8":
-            print("\nEncerando o programa...")
+            print("\n Encerando o programa...")
             sleep(1.5)
             break
         else:
