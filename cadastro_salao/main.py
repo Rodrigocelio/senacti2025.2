@@ -33,7 +33,7 @@ def mostrar_barra_carregamento():
         console.print(painel, style="gray30")
         sleep(.1)
         limpar_tela()
-        progresso += "///"
+        progresso += "//"
 
 
 def logar(usuario, senha):
@@ -81,43 +81,43 @@ def listar_clientes(clientes):
         sleep(3)
         return
     print("")
-    console.print(Panel.fit("-"*45 + " Lista de clientes cadastrados " + "-"*45), style="red")
+    console.print(Panel("", title="Lista de Clientes Cadastrados", style="gray30"))
 
     # Desconpacta o index e os dados do cliente
-    for n_cliente, cliente in enumerate(clientes, 1):
-        print(f"{n_cliente:>4} -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
+    for n, cliente in enumerate(clientes, 1):
+        print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
 
 
 def buscar_clientes(clientes):
     """Busca clientes por nome em uma lista e exibe os resultados."""
-    console.print(Panel.fit("-"*25 + " Buscar cliente por nome " + "-"*25), style="red")
-    nome_busca = str(input("Digite o nome do cliente que deseja buscar: ")).lower()
-
+    console.print(Panel("", title="Buscar cliente por nome"), style="gray30")
+    nome_busca = str(input(" Digite o nome do cliente que deseja buscar: ")).lower()
     # Filtra a lista de clientes para encontrar nomes que contenham o termo de busca
     resultados = [cliente for cliente in clientes if nome_busca == cliente['nome']]
 
-    print(f"\n--- Resultados da busca por '{nome_busca}' ---")
+    console.print(Panel("", title=f"--- Resultados da busca por '{nome_busca}' ---", style="gray30"))
 
     if resultados:
         for i, cliente in enumerate(resultados, 1):
-            print(f"{i:>6}. Nome: {cliente['nome']:<20}, Telefone: {cliente['telefone']:<20}, Email: {cliente['email']:<20}")
-        print("-"*50)
+            print(f"{i:>4}º Nome: {cliente['nome']:<20} Telefone: {cliente['telefone']:<20} Email: {cliente['email']:<20}")
+        console.print(Panel("", style="gray30"))
     else:
-        print(f"\nNenhum cliente com o nome '{nome_busca}' foi encontrado.")
+        print(f"\n Nenhum cliente com o nome '{nome_busca}' foi encontrado.")
 
 
 # TODO: A função deverá verificar o usuário já está cadastrado.
 def criar_agendamento(agendamentos):
-    """"""
-    print("\n --- Novo Agendamento ---")
+    """Cria um agendamento de serviço."""
+    console.print(Panel("", title="Novo Agendamento", style="gray30"))
     try:
-        nome = str(input("Nome do Cliente: "))
-        telefone = str(input("Telefone: "))
-        data = str(input("Data (DD/MM/AAAA): "))
-        hora = str(input("Hora (HH:MM): "))
-        barbeiro = str(input("Barbeiro responsavel: "))
-        servico = str(input("Serviço (ex.corte,barba,...)"))
+        nome = str(input(" Nome do Cliente: "))
+        telefone = str(input(" Telefone: "))
+        data = str(input(" Data[dd/mm/aa]): "))
+        hora = str(input(" Hora[hh:mm]: "))
+        barbeiro = str(input(" Barbeiro responsavel: "))
+        servico = str(input(" Serviço[ex.corte, barba)]: "))
 
+        # Formatando os dados.
         #Dicionario do agendamento
         agendamento = {
             "nome": nome,
@@ -126,6 +126,8 @@ def criar_agendamento(agendamentos):
             "hora": hora,
             "barbeiro": barbeiro,
             "servico": servico}
+        
+        # Adicionando agendamento a lista de agendados.
         agendamentos.append(agendamento)
 
         print(f"\n ✅ Agendamento confirmado para {nome} em {data} ás {hora} com {barbeiro}.")
@@ -134,50 +136,50 @@ def criar_agendamento(agendamentos):
 
 
 def listar_agendamentos(agendamentos):
-    """"""
-    print("\n--- Lista de Agendamentos ---\n")
+    """Lista todos os agendamentos registrados."""
+    console.print(Panel("", title="Lista de Agendamentos", style="gray30"))
     try:
       if not agendamentos:
-        print("Nenhum Agendamento Encontrado.")
+        print(" Nenhum Agendamento Encontrado.")
       else:
         for n, agendamento in enumerate(agendamentos, 1):
-          print(f"{n:>6}º {agendamento['nome']:<20} | {agendamento['data']:<20} | {agendamento['hora']:<20} | {agendamento['barbeiro']:<20} [{agendamento['servico']:<20}]")
+          print(f"{n:>4}º {agendamento['nome']:<20} | {agendamento['data']:<20} | {agendamento['hora']:<20} | {agendamento['barbeiro']:<20} [{agendamento['servico']:<20}]")
     except Exception as erro:
         print(f" Ocorreu um erro ao listar os agendamentos: {erro}")
 
 
 def buscar_agendamento(agendamentos):
-    """"""
-    print(f"\n --- Buscar Agendamentos ---")
+    """Busca um agendamento especifico dentro de agendamentos."""
+    console.print(Panel("", title="Buscar Agendamentos", style="gray30"))
     try:
-        nome = str(input("Digite nome do cliente: "))
+        nome = str(input(" Digite nome do cliente: "))
         # Lista de compreesão para localizar o nome na lista de clientes.
         encontrados = [agendamento for agendamento in agendamentos if agendamento['nome'].lower() == nome.lower()]
         if encontrados:
             for agendamento in encontrados:
-                print(f"\nCliente: {agendamento["nome"]}")
-                print(f"Telefone: {agendamento["telefone"]}")
-                print(f"Data: {agendamento["data"]}")
-                print(f"Hora: {agendamento["hora"]}")
-                print(f"Barbeiro: {agendamento["barbeiro"]}")
-                print(f"Servico: {agendamento["servico"]}")
+                print(f"\n Cliente: {agendamento["nome"]}")
+                print(f" Telefone: {agendamento["telefone"]}")
+                print(f" Data: {agendamento["data"]}")
+                print(f" Hora: {agendamento["hora"]}")
+                print(f" Barbeiro: {agendamento["barbeiro"]}")
+                print(f" Servico: {agendamento["servico"]}")
         else:
-            print("Nenhum agendamento encontrado para esse nome.")
+            print(" Nenhum agendamento encontrado para esse nome.")
     except Exception as erro:
         print(f" Ocorreu um erro ao buscar agendamento: {erro}")
 
 
 def cancelar_agendamento(agendamentos):
-  """"""
-  print(f"\n --- Cancelar Agendamento ---")
+  """Cancela um agendamento especifico."""
+  console.print(Panel("", title="Cancelar Agendamento", style="gray30"))
   try:
       nome = str(input("Digite o nome do cliente: "))
-      for i, a in enumerate(agendamentos):
-          if a["nome"].lower() == nome.lower():
+      for i, agendamento in enumerate(agendamentos):
+          if agendamento["nome"].lower() == nome.lower():
               cancelado = agendamentos.pop(i)
-              print(f'Agendamento com {cancelado['nome']} foi cancelado.')
+              print(f'\n\nAgendamento com {cancelado['nome']} foi cancelado.')
               return
-      print("Agendamento não encontrado.")
+      print(" Agendamento não encontrado.")
   except Exception as erro:
         print(f" Erro ao cancelar: {erro}")
 
@@ -234,7 +236,7 @@ def main():
             mostrar_logo_personalizado()
             listar_clientes(clientes)
             # Congela a tela até que o usuário digite alguma coisa.
-            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+            if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
         # Abre a telinha para buscar um cliente especifico.
@@ -243,7 +245,7 @@ def main():
             mostrar_logo_personalizado()
             buscar_clientes(clientes)
             # Congela a tela até que o usuário digite alguma coisa
-            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+            if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
         # Abre uma tela para criar um agendamento.
@@ -258,7 +260,7 @@ def main():
             mostrar_logo_personalizado()
             listar_agendamentos(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
-            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+            if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
         # BIsca um agendamento especifico.
@@ -267,7 +269,7 @@ def main():
             mostrar_logo_personalizado()
             buscar_agendamento(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
-            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+            if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
         # Cencela um agendamento.
@@ -276,7 +278,7 @@ def main():
             mostrar_logo_personalizado()
             cancelar_agendamento(agendamentos)
             # Congela a tela até que o usuário digite alguma coisa
-            if type(input("\nAperte 'ENTER' para voltar: ")) == str:
+            if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                 limpar_tela()
                 continue
         # Encerra o programa.
