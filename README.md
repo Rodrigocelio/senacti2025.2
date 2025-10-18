@@ -344,8 +344,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ## 🌟 Agradecimentos
 
-- Design inspirado em barbearias premium modernas
-- Tipografia: [Google Fonts - Inter](https://fonts.google.com/specimen/Inter)
+- Agradecimento a todos o colaboradores da Equipe "Turma do Back" (Abraao, João, Paulo e Rodrigo)
 
 ---
 
