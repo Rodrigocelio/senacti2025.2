@@ -1,10 +1,7 @@
 # 🪒 BarberBack - Sistema de Gestão de Barbearia
-<div>
- <tr>
-  <td style="background: linear-gradient(135deg, #C39900 0%, #8B0000 100%); padding: 40px 30px; text-align: center;">
+
+<div align="center">
    <img src="https://senac.ct.ws/dark_logo.png" alt="BarberBack" width="180" style="display: block; margin: 0 auto; max-width: 180px; height: auto;">
-  </td>
- </tr>
 </div>
 Sistema completo de cadastro de clientes e agendamento de serviços para barbearias, com integração automática via webhook para envio de emails de confirmação.
 
