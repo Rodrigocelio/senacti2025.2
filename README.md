@@ -352,7 +352,8 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 **Desenvolvido com ☕ e ✂️ para a comunidade barbeira**
 
-![BarberBack](https://senac.ct.ws/white_logo.png)
+ <img src="https://senac.ct.ws/dark_logo.png" alt="BarberBack" width="180" style="display: block; margin: 0 auto; max-width: 180px; height: auto;">
+
 
 [⬆ Voltar ao topo](#-barberback---sistema-de-gestão-de-barbearia)
 
