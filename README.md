@@ -2,7 +2,7 @@
 <div>
  <tr>
   <td style="background: linear-gradient(135deg, #C39900 0%, #8B0000 100%); padding: 40px 30px; text-align: center;">
-   <img src="https://senac.ct.ws/white_logo.png" alt="BarberBack" width="180" style="display: block; margin: 0 auto; max-width: 180px; height: auto;">
+   <img src="https://senac.ct.ws/black_logo.png" alt="BarberBack" width="180" style="display: block; margin: 0 auto; max-width: 180px; height: auto;">
   </td>
  </tr>
 </div>
