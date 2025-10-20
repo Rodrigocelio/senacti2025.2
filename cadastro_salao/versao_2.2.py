@@ -86,7 +86,7 @@ def fazer_agendamento(clientes, agendamentos):
     for id, nome in profissionais.items():
         print(f"{id}. {nome}")
     prof_id = input("Escolha um profissional pelo número: ")
-    if prof_id.isdigit() and int(prof_id) in profissionais:
+    if prof_id.isdigit() and int(prof_id) in profissionais: # Complicou!
         profissional = profissionais[int(prof_id)]
         print(f"Profissional {profissional} selecionado.")
     else:
