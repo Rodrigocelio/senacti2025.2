@@ -11,7 +11,7 @@ from rich.text import Text
 
 
 # Esse é o obejeto da biblioteca Rich que utilizamos para imprimir as 
-# informações formatadas.
+# saídas formatadas no terminal.
 console = Console()
 
 
