@@ -9,28 +9,37 @@ from rich.panel import Panel
 from rich.text import Text
 
 
+# Esse é o obejeto da biblioteca Rich que utilizamos para imprimir as 
+# informações formatadas.
 console = Console()
 
 
 def limpar_tela():
-    """Limpa a tela do console de forma multiplataforma."""
+    """Limpa a tela do console de forma multiplataforma. Essa função funciona 
+    para Linux, Mac e Windows.
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def mostrar_logo_personalizado():
-    """Renderiza a logo do programa em uma ASCII Art."""
-    logo = pyfiglet.figlet_format("  BarbeBack  ")
+    """Cria um logo renderizado pelo módulo pyfiglet e imprime centralizado 
+    dentro de um painel definido pela biblioteca Rich. O logo do programa é uma 
+    ASCII Art.
+    """
+    logo = pyfiglet.figlet_format("  BarberBack  ")
     logo_centralizado = Text(logo, justify="center")
     painel = Panel(logo_centralizado)
     console.print(painel, style="white")
 
 
 def mostrar_barra_carregamento():
-    """Mostra uma barra de carregamento para iniciar o programa."""
+    """Mostra uma barra de carregamento. A lógica é simples: temos um laço de 
+    um intervalo de 50, a cada volta a variável progresso é incrementada com 
+    dois caracteres de barra e no laço seguinte ela é impressa.
+    """
     progresso = ""
     for p in range(50):
         mostrar_logo_personalizado()
-        # Centraliza a barra, coloca no painel e mostra o painel.
         progresso_centralizado = Text(progresso, justify="center")
         painel = Panel(progresso_centralizado, title="Carregando, aguarde!")
         console.print(painel, style="white")
@@ -40,27 +49,32 @@ def mostrar_barra_carregamento():
 
 
 def logar(usuario, senha):
-    """Verifica se o usuário é um 'adm' do sistema.""" 
-    # Armazena o usuário e senha capaz de logar no sistema.
+    """Verifica se o usuário é um dos adminitradores do sistema. Os valores de 
+    login são armazenados em um dicionário que é consultado para validar o 
+    acesso.
+    """ 
     adm = {'usuario': 'salinas', 
            'senha': '123'}
-    # Verifica se existe o usuário está cadastrado. 
+     
     if usuario == adm['usuario'] and senha == adm['senha']:
             return 1
     return 0
 
 
 def mostrar_menu():
-    """A função mostra um menu com as possivés opções."""
+    """Cria e imprime um menu formatado com a biblioteca Rich."""
     menu = """\n1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Sair\n"""
-    # Cria um painel com uma saida mais elegante.
+
     painel = Panel.fit(menu, title="=== Sistema de Cadastro de Clientes - Barbearia ===")
     console.print(painel, style="white", justify="left")
 
 
 def enviar_dados(payload):
-    """Envia dados genéricos via webhook."""
-    webhook_url = "https://hook.us2.make.com/1adv2sv028glhonhwu3n1mxwzn7dgsp6"  # Substitua pela sua URL do webhook
+    """Envia dados genéricos via webhook. A variável 'webhook' é possível 
+    atualizar para qualquer outra URL webhook válida.
+    """
+    webhook_url = "https://hook.us2.make.com/1adv2sv028glhonhwu3n1mxwzn7dgsp6"
+
     headers = {
     "Content-Type": "application/json",
       }
@@ -80,13 +94,13 @@ def enviar_dados(payload):
         print(f"\n ❌ Falha ao enviar dados: {e}")
 
 
-# Adicionar tratamento de exceções.
 def cadastrar_cliente(clientes):
-    """Cadastra um novo cliente.""" 
+    """Cadastra um novo cliente armazenando no dicionário 'clientes'."""
+    # Cria uma interface mais elegante.
     console.print(Panel("", title="Cadastrar Cliente"), style="white")
     nome = input(" Nome do cliente: ").lower()
     telefone = input(" Telefone do cliente: ")
-    email = input(" E-mail do cliente: ").lower()
+    email = input(" E-mail do cliente: ").lower().strip()
     tag = "cadastro"
     
     # Dicionário para o cliente.
@@ -101,18 +115,21 @@ def cadastrar_cliente(clientes):
     clientes.append(cliente)
     print(f"\n Cliente {nome.capitalize()} cadastrado com sucesso!")
     enviar_dados(cliente)
+    sleep(1)
 
 
 def listar_clientes(clientes):
-    """Lista todos os clientes utilizando enumerate para contar todos."""
+    """Lista todos os clientes utilizando enumerate para gerar um ID de 
+    cadastro.
+    """
     if not clientes:
         print("Nenhum cliente cadastrado.")
         sleep(3)
         return
+    
     print("")
     console.print(Panel("", title="Lista de Clientes Cadastrados", style="white"))
 
-    # Desconpacta o index e os dados do cliente
     for n, cliente in enumerate(clientes, 1):
         print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
 
@@ -120,22 +137,24 @@ def listar_clientes(clientes):
 def buscar_clientes(clientes):
     """Busca clientes por nome em uma lista e exibe os resultados."""
     console.print(Panel("", title="Buscar cliente por nome"), style="white")
-    nome_busca = str(input(" Digite o nome do cliente que deseja buscar: ")).lower()
-    # Filtra a lista de clientes para encontrar nomes que contenham o termo de busca
-    resultados = [cliente for cliente in clientes if nome_busca == cliente['nome']]
 
-    console.print(Panel("", title=f"Resultados da busca por '{nome_busca}'", style="white"))
+    nome = str(input(" Digite o nome do cliente que deseja buscar: ")).lower()
+    # Filtra a lista de clientes para encontrar nomes que contenham o termo de busca
+    resultados = [cliente for cliente in clientes if nome == cliente['nome']]
+
+    console.print(Panel("", title=f"Resultados da busca por '{nome}'", style="white"))
 
     if resultados:
         for i, cliente in enumerate(resultados, 1):
             print(f"{i:>4}º Nome: {cliente['nome']:<20} Telefone: {cliente['telefone']:<20} Email: {cliente['email']:<20}")
     else:
-        print(f"\n Nenhum cliente com o nome '{nome_busca}' foi encontrado.")
+        print(f"\n Nenhum cliente com o nome '{nome}' foi encontrado.")
 
 
-# TODO: A função deverá verificar o usuário já está cadastrado.
 def criar_agendamento(clientes, agendamentos, profissionais, servicos):
-    """Cria um agendamento de serviço."""
+    """Cria um agendamento de serviço e aciona o envio de e-mail confirmando o 
+    agendamento.
+    """
     console.print(Panel("", title="Novo Agendamento", style="white"))
     try:
         # Verifica se o cliente já tem cadastro.
@@ -196,7 +215,7 @@ def criar_agendamento(clientes, agendamentos, profissionais, servicos):
 
             dt = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
         except ValueError:
-            print("Data ou horário inválidos. Use o formato DD/MM/YYYY e HH:MM.")
+            print(" Data ou horário inválidos. Use o formato DD/MM/YYYY e HH:MM.")
             return
 
         # Dicionario do agendamento
@@ -268,7 +287,7 @@ def buscar_agendamento(agendamentos):
 
 
 def cancelar_agendamento(agendamentos):
-  """Cancela um agendamento especifico."""
+  """Cancela um agendamento informado por um administrador."""
   console.print(Panel("", title="Cancelar Agendamento", style="white"))
   try:
       nome = str(input(" Digite o nome do cliente: "))
