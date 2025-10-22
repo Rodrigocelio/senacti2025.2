@@ -1,5 +1,6 @@
 import os
 from time import sleep
+import re
 import json
 import urllib.request
 from datetime import datetime
@@ -94,13 +95,26 @@ def enviar_dados(payload):
         print(f"\n ❌ Falha ao enviar dados: {e}")
 
 
+def validar_email(email):
+    """Valida por meio de uma expressão regular simples se o e-mail está no formato correto. Essa implementação serve para evitar que o webhook não engasgue caso o usuário entre um e-mail errado..
+    """
+    padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    return re.match(padrao, email) is not None
+
+
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente armazenando no dicionário 'clientes'."""
     # Cria uma interface mais elegante.
     console.print(Panel("", title="Cadastrar Cliente"), style="white")
     nome = input(" Nome do cliente: ").lower()
     telefone = input(" Telefone do cliente: ")
-    email = input(" E-mail do cliente: ").lower().strip()
+
+    while True:
+        email = input(" E-mail do cliente: ").lower().strip()
+        if validar_email(email):
+            break
+        print("E-mail inválido, tente novamente.")
+    
     tag = "cadastro"
     
     # Dicionário para o cliente.
