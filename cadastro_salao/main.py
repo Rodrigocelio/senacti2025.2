@@ -56,7 +56,14 @@ def logar(usuario, senha):
     """ 
     adm = {'usuario': 'salinas', 
            'senha': '123'}
-     
+
+    try:
+        with open("./senacti2025.2/cadastro_salao/credenciais.txt") as credenciais:
+            arq_aberto = credenciais.read()
+            print(arq_aberto)
+    except OSError:
+        pass
+
     if usuario == adm['usuario'] and senha == adm['senha']:
             return 1
     return 0
