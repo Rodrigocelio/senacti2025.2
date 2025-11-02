@@ -1,12 +1,15 @@
-Neste arquivo, definimos as credenciais necessárias para acessar o sistema de
-cadastro do salão. As credenciais incluem o nome de usuário e a senha, que são essenciais para autenticação.
-
-
-# --- credencial 01
 -salinas
 :123
 
-# --- credencial 02
+-abraao
+:1234
 
+-paulo
+:1254
 
-# --- credencial 03
+-pedro
+:12345
+
+-ester
+:4569
+
