@@ -1,0 +1,30 @@
+# Arquivos sensíveis (não versionar)
+cadastro_salao/chave.key
+cadastro_salao/credenciais.txt
+
+# Ignorar todas as chaves e arquivos de credenciais por segurança
+*.key
+credenciais.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Editor/IDE
+.vscode/
+*.code-workspace
+
+# Logs e bancos de dados locais
+*.log
+*.sqlite3
+
+# Distribuição
+build/
+dist/
+*.egg-info/
