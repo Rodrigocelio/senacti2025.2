@@ -172,8 +172,8 @@ def logar():
     """ 
     adm = buscar_credenciais_registradas()
     usuario, senha = solicitar_login()
-    for i in range(len(adm['usuarios'])):
-        if usuario == adm['usuarios'][i] and senha == adm['senhas'][i]:
+    for par_credencial in zip(adm['usuarios'], adm['senhas']):
+        if usuario == par_credencial[0] and senha == par_credencial[1]:
             return 1
     return 0
 
