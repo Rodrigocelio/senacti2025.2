@@ -3,11 +3,6 @@ from cryptography.fernet import Fernet
 import base64
 
 
-# Arquivos para persistir as credenciais e a chave simétrica (não versionar).
-ARQ_CREDENCIAIS = os.path.join(os.path.dirname(__file__), "credenciais.txt")
-ARQ_CHAVE = os.path.join(os.path.dirname(__file__), "chave.key")
-
-
 def _carregar_ou_gerar_chave(arq_chave):
     """Carrega a chave do arquivo ou gera uma nova e salva em arq_chave.
     Return -> bytes
@@ -19,19 +14,27 @@ def _carregar_ou_gerar_chave(arq_chave):
         chave = Fernet.generate_key()
         with open(arq_chave, "wb") as arq_chave:
             arq_chave.write(chave)
-            return Fernet(chave)        
+            return chave        
+
+
+# Arquivos para persistir as credenciais e a chave simétrica (não versionar).
+ARQ_CREDENCIAIS = os.path.join(os.path.dirname(__file__), "..", "data", "credenciais.txt")
+ARQ_CHAVE = os.path.join(os.path.dirname(__file__), "..", "data", "chave.key")
+
+# Implementando criptografia simétrica.
+chave = _carregar_ou_gerar_chave(ARQ_CHAVE)
+fernet = Fernet(chave)
 
 
 def _criptografar_credenciais(usuario, senha):
     """Recebe usuario e senha e criptografa utilizando uma chave simétrica.
     Return -> bytes
     """
-    fernet = _carregar_ou_gerar_chave(ARQ_CHAVE) 
     try:
         usuario = fernet.encrypt(usuario.encode())
         senha = fernet.encrypt(senha.encode())
-    except fernet.InvalidToken as erro:
-        raise Exception(f"A chave é inválida! {erro}")
+    except Exception as erro:
+        raise Exception(f"Erro identificado: {erro}")
     return usuario, senha
 
 
@@ -40,11 +43,10 @@ def _descriptografar_credenciais(credenciais):
     simétrica.
     Return -> str
     """
-    fernet = _carregar_ou_gerar_chave(ARQ_CHAVE) 
     try:
         credenciais = fernet.decrypt(credenciais)
-    except fernet.InvalidToken as erro:
-        raise Exception(f"A chave é inválida! {erro}")
+    except Exception as erro:
+        raise Exception(f"Erro identificado: {erro}")
     return credenciais
 
 

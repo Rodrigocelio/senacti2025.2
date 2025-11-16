@@ -1,5 +1,5 @@
 from time import sleep
-from rich import print
+from rich.console import Console
 from datetime import datetime
 from rich.panel import Panel
 
@@ -7,11 +7,14 @@ from core.web_integration import (enviar_dados, validar_email)
 from utils.console_tools import (limpar_tela, mostrar_logo_personalizado)
 
 
+console = Console()
+
+
 def cadastrar_cliente(clientes):
     """Cadastra um novo cliente armazenando no dicionário 'clientes'."""
     # Cria uma interface mais elegante.
     titulo = "Cadastrar Cliente"
-    print(Panel("", title=titulo), style="white")
+    console.print(Panel("", title=titulo), style="white")
 
     nome = str(input(" Nome do cliente: ")).lower().strip()
     telefone = str(input(" Telefone do cliente: ")).strip()
@@ -34,7 +37,7 @@ def cadastrar_cliente(clientes):
 
     # Adiciona o cliente à lista de clientes.
     clientes.append(cliente)
-    print(f"\n Cliente {nome.capitalize()} cadastrado com sucesso!")
+    console.print(f"\n Cliente {nome.capitalize()} cadastrado com sucesso!")
     enviar_dados(cliente)
     sleep(1)
 
@@ -50,28 +53,28 @@ def listar_clientes(clientes):
     
     print("")
     titulo = "Lista de Clientes Cadastrados"
-    print(Panel("", title=titulo, style="white"))
+    console.print(Panel("", title=titulo, style="white"))
 
     for n, cliente in enumerate(clientes, 1):
-        print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}")
+        console.print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}",style="red")
 
 
 def buscar_clientes(clientes):
     """Busca clientes por nome em uma lista e exibe os resultados."""
     titulo = "Buscar cliente por nome"
-    print(Panel("", title=titulo), style="white")
+    console.print(Panel("", title=titulo), style="white")
 
     nome = str(input(" Nome do cliente que deseja buscar: ")).lower().strip()
     # Encontra nomes que contenham o termo de busca
     encontrado = [cliente for cliente in clientes if nome == cliente['nome']]
 
-    print(Panel("", title=f"Resultados da busca por '{nome}'", style="white"))
+    console.print(Panel("", title=f"Resultados da busca por '{nome}'", style="white"))
 
     if encontrado:
         for i, cliente in enumerate(encontrado, 1):
-            print(f"{i:>4}º Nome: {cliente['nome']:<20} Telefone: {cliente['telefone']:<20} Email: {cliente['email']:<20}")
+            console.print(f"{i:>4}º Nome: {cliente['nome']:<20} Telefone: {cliente['telefone']:<20} Email: {cliente['email']:<20}")
     else:
-        print(f"\n Nenhum cliente com o nome '{nome}' foi encontrado.")
+        console.print(f"\n Nenhum cliente com o nome '{nome}' foi encontrado.")
 
 
 def _selecionar_cliente(clientes):
@@ -94,9 +97,9 @@ def _selecionar_profisional(profissionais):
     """"""
     limpar_tela()
     mostrar_logo_personalizado()
-    print(Panel("", title="Novo Agendamento", style="white"))
+    console.print(Panel("", title="Novo Agendamento", style="white"))
     titulo = "Profissionais disponíveis"
-    print(Panel("", title=titulo, style="white"))
+    console.print(Panel("", title=titulo, style="white"))
     
     for id, nome in profissionais.items():
         print(f"{id:>4}º -: {nome:<6}")
@@ -115,13 +118,13 @@ def _selecionar_servico(servicos):
     """"""
     limpar_tela()
     mostrar_logo_personalizado()
-    print(Panel("", title="Novo Agendamento", style="white"))
-    print(Panel("", title="Serviços disponíveis", style="white"))
-    
+    console.print(Panel("", title="Novo Agendamento", style="white"))
+    console.print(Panel("", title="Serviços disponíveis", style="white"))
+
     for id, info in servicos.items():
         print(f"{id:>4}º -: {info['nome']:<6} - R${info['valor']:<6.2f} - ↳ {info['descricao']:<6}")
 
-    opcao = input("\n\n Escolha um serviço para agendar: ")
+    opcao = input("\n\n Escolha o ID do serviço: ")
     if opcao.isdigit() and int(opcao) in servicos:
         servico_info = servicos[int(opcao)]
         servico = servico_info["nome"]
@@ -132,8 +135,8 @@ def _coletar_timestamp():
     """"""
     limpar_tela()
     mostrar_logo_personalizado()
-    print(Panel("", title="Novo Agendamento", style="white"))
-    print(Panel("", title="Data/Hora", style="white"))
+    console.print(Panel("", title="Novo Agendamento", style="white"))
+    console.print(Panel("", title="Data/Hora", style="white"))
     
     try:
         data = input(" Digite a data do agendamento (DD/MM/YYYY): ")
@@ -150,7 +153,7 @@ def criar_agendamento(clientes, agendamentos, profissionais, servicos):
     """Cria um agendamento de serviço e aciona o envio de e-mail confirmando o 
     agendamento.
     """
-    print(Panel("", title="Novo Agendamento", style="white"))
+    console.print(Panel("", title="Novo Agendamento", style="white"))
 
     try:
         # Verifica se existe clientes cadastros.
@@ -160,7 +163,7 @@ def criar_agendamento(clientes, agendamentos, profissionais, servicos):
         listar_clientes(clientes)
 
         # Área de coleta do cliente.
-        cliente_selecionado = _selecionar_cliente()
+        cliente_selecionado = _selecionar_cliente(clientes)
 
         # Área de coleta do profissional.
         profissional = _selecionar_profisional(profissionais)
@@ -203,7 +206,7 @@ def criar_agendamento(clientes, agendamentos, profissionais, servicos):
 def listar_agendamentos(agendamentos):
     """Lista todos os agendamentos registrados."""
     titulo = "Lista de Agendamentos"
-    print(Panel("", title=titulo, style="white"))
+    console.print(Panel("", title=titulo, style="white"))
     try:
         if not agendamentos:
             print(" Nenhum Agendamento Encontrado.")
@@ -220,7 +223,7 @@ def listar_agendamentos(agendamentos):
 
 def buscar_agendamento(agendamentos):
     """Busca um agendamento especifico dentro de agendamentos."""
-    print(Panel("", title="Buscar Agendamentos", style="white"))
+    console.print(Panel("", title="Buscar Agendamentos", style="white"))
     try:
         nome = str(input(" Digite nome do cliente: "))
         # Lista de compreesão para localizar o nome na lista de clientes.
@@ -242,7 +245,7 @@ def buscar_agendamento(agendamentos):
 
 def cancelar_agendamento(agendamentos):
   """Cancela um agendamento informado por um administrador."""
-  print(Panel("", title="Cancelar Agendamento", style="white"))
+  console.print(Panel("", title="Cancelar Agendamento", style="white"))
   try:
       nome = str(input(" Digite o nome do cliente: "))
       for i, agendamento in enumerate(agendamentos):
