@@ -24,7 +24,9 @@ def enviar_dados(payload):
 
 
 def validar_email(email):
-    """Valida por meio de uma expressão regular simples se o e-mail está no formato correto. Essa implementação serve para evitar que o webhook não engasgue caso o usuário entre um e-mail errado..
+    """Valida por meio de uma expressão regular simples se o e-mail está no 
+    formato correto. Essa implementação serve para evitar que o webhook não 
+    engasgue caso o usuário entre um e-mail errado..
     """
     padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(padrao, email) is not None
