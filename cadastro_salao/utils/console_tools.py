@@ -1,25 +1,31 @@
 import os
-import pyfiglet
+from time import sleep
+from getpass import getpass
+from pyfiglet import figlet_format
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+
+
+console = Console()
 
 
 def limpar_tela():
     """Limpa a tela do console de forma multiplataforma.
     Essa função funciona para Linux, Mac e Windows.
     """
-    os.system('cls' if os.name == 'nt' else 'clear')
+    if os.name == "nt":
+        return os.system('cls')
+    os.system('clear')
 
 
 def mostrar_logo_personalizado():
-    """Cria um logo renderizado pelo módulo pyfiglet 
-    e imprime centralizado dentro de um painel definido 
-    pela biblioteca Rich. O logo do programa é uma ASCII Art.
+    """Cria um logo renderizado pelo módulo pyfiglet e imprime centralizado 
+    dentro de um painel definido pela biblioteca Rich. O logo do programa é uma
+    ASCII Art.
     """
-    logo = pyfiglet.figlet_format("  BarberBack  ")
-    logo_centralizado = Text(logo, justify="center")
-    painel = Panel(logo_centralizado)
+    logo = figlet_format("  BarberBack  ")
+    painel = Panel(Text(logo, justify="center"))
     console.print(painel, style="white")
 
 
@@ -32,8 +38,7 @@ def mostrar_barra_carregamento():
     progresso = ""
     for p in range(50):
         mostrar_logo_personalizado()
-        progresso_centralizado = Text(progresso, justify="center")
-        painel = Panel(progresso_centralizado, title="Carregando, aguarde!")
+        painel = Panel(Text(progresso, justify="center"), title="Carregando, aguarde!")
         console.print(painel, style="white")
         sleep(.1)
         limpar_tela()
@@ -41,9 +46,17 @@ def mostrar_barra_carregamento():
 
 
 def solicitar_login():
-    """Solicita as credenciais do usuário com um diferencial. A senha é 
-    solicitada de forma segura, ou seja, ela não é exibida no terminal.
+    """Solicita as credenciais do usuário. A senha é solicitada de forma 
+    segura. Ela não é exibida no terminal.
     """
-    usuario = input(" Usuário: ")
-    senha = getpass.getpass(" Senha: ", stream=None)
+    usuario = str(input(" Usuário: ")).strip()
+    senha = getpass(" Senha: ").strip()
     return usuario, senha
+
+
+def mostrar_menu():
+    """Cria e imprime um menu formatado com a biblioteca Rich."""
+    menu = """\n1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Cadastrar Administrador\n9. Sair"""
+
+    painel = Panel.fit(menu, title="=== Sistema de Cadastro de Clientes - Barbearia ===")
+    console.print(painel, style="white", justify="left")

@@ -1,19 +1,19 @@
+import re
+import json
+from urllib.request import (Request, urlopen)
+from utils.supplementation import (WEBHOOK_URL, HEADERS)
+
+
 def enviar_dados(payload):
     """Envia dados genéricos via webhook. A variável 'webhook' é possível 
     atualizar para qualquer outra URL webhook válida.
-    """
-    webhook_url = "https://hook.us2.make.com/1adv2sv028glhonhwu3n1mxwzn7dgsp6"
-
-    headers = {
-    "Content-Type": "application/json",
-      }
-    
+    """    
     data = json.dumps(payload).encode("utf-8")
  
-    requisicao = urllib.request.Request(webhook_url, data=data, headers=headers, method="POST")
+    request = Request(WEBHOOK_URL, data=data, headers=HEADERS, method="POST")
 
     try:
-        with urllib.request.urlopen(requisicao) as response:
+        with urlopen(request) as response:
             status_code = response.getcode()
             if 200 <= status_code < 300:
                 print("\n ✅ Dados enviados com sucesso ao webhook!")

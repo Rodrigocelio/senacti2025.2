@@ -2,7 +2,6 @@ import getpass
 import os
 from cryptography.fernet import Fernet
 import base64
-import os
 from time import sleep
 import re
 import json
