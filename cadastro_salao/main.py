@@ -9,17 +9,17 @@ from utils.console_tools import (limpar_tela, mostrar_logo_personalizado,
 from utils.security import (logar, cadastrar_adm)
 
 from core.data_handler import (cadastrar_cliente, buscar_clientes, 
-                               listar_clientes)
+                               listar_clientes, cadastrar_profissional)
 
 from core.data_handler import (criar_agendamento, buscar_agendamento, 
-                               listar_agendamentos, cancelar_agendamento)
+                               listar_agendamentos, cancelar_agendamento, _armazenar_clientes_DB)
 
 from utils.supplementation import (PROFISIONAIS, SERVICOS)
 
 
 def main():
     """Fluxo de execução de todo sistema."""    
-    clientes = []
+    clientes = [] # -> Trocar por um dateframe.
     agendamentos = []
 
     mostrar_barra_carregamento()
@@ -60,12 +60,12 @@ def main():
             case "1":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                cadastrar_cliente(clientes)
+                cadastrar_cliente()
             # Mostra um relatório com todos os clientes cadastrados.
             case "2":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                listar_clientes(clientes)
+                listar_clientes()
                 # Congela a tela até que o usuário digite alguma coisa.
                 if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                     limpar_tela()
@@ -74,7 +74,7 @@ def main():
             case "3":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                buscar_clientes(clientes)
+                buscar_clientes()
                 # Congela a tela até que o usuário digite alguma coisa
                 if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                     limpar_tela()
@@ -83,12 +83,12 @@ def main():
             case "4":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                criar_agendamento(clientes, agendamentos, PROFISIONAIS, SERVICOS)
+                criar_agendamento(SERVICOS)
                 sleep(3)
             case "5":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                listar_agendamentos(agendamentos)
+                listar_agendamentos()
                  # Congela a tela até que o usuário digite alguma coisa
                 if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                     limpar_tela()
@@ -97,7 +97,7 @@ def main():
             case "6":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                buscar_agendamento(agendamentos)
+                buscar_agendamento()
                 # Congela a tela até que o usuário digite alguma coisa
                 if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                     limpar_tela()
@@ -106,7 +106,7 @@ def main():
             case "7":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                cancelar_agendamento(agendamentos)
+                cancelar_agendamento()
                 # Congela a tela até que o usuário digite alguma coisa
                 if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
                     limpar_tela()
@@ -117,8 +117,13 @@ def main():
                 mostrar_logo_personalizado()
                 usuario, senha = solicitar_login()
                 cadastrar_adm(usuario, senha)
-            # Encerra o programa.
+            # Cadastra um novo profisional.
             case "9":
+                limpar_tela()
+                mostrar_logo_personalizado()
+                cadastrar_profissional()
+            # Encerra o programa.
+            case "10":
                 print("\n Encerando o programa...")
                 sleep(1.5)
                 break

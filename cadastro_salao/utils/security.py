@@ -1,6 +1,7 @@
 import os
 from cryptography.fernet import Fernet
 import base64
+from utils.supplementation import (ARQ_CHAVE, ARQ_CREDENCIAIS)
 
 
 def _carregar_ou_gerar_chave(arq_chave):
@@ -16,10 +17,6 @@ def _carregar_ou_gerar_chave(arq_chave):
             arq_chave.write(chave)
             return chave        
 
-
-# Arquivos para persistir as credenciais e a chave simétrica (não versionar).
-ARQ_CREDENCIAIS = os.path.join(os.path.dirname(__file__), "..", "data", "credenciais.txt")
-ARQ_CHAVE = os.path.join(os.path.dirname(__file__), "..", "data", "chave.key")
 
 # Implementando criptografia simétrica.
 chave = _carregar_ou_gerar_chave(ARQ_CHAVE)

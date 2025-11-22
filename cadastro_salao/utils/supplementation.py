@@ -1,3 +1,5 @@
+import os
+
 SERVICOS = {
         1: {"nome": "Corte de cabelo", 
             "descricao": "Corte moderno com acabamento na navalha.", 
@@ -11,8 +13,21 @@ SERVICOS = {
             "descricao": "Cabelo + Barba + Printura com desconto especial.", "valor": 60.00}
     }
 
-PROFISIONAIS = {1: "Joao", 2: "Abraao", 3: "Rodrigo"}
+SERVICOS1 = os.path.join(os.path.dirname(__file__), "..", "data", "tabela_servicos.xlsx")
+
+AGENDAMENTOS = os.path.join(os.path.dirname(__file__), "..", "data", "agendamentos.xlsx")
+
+PROFISIONAIS1 = {1: "Joao", 2: "Abraao", 3: "Rodrigo"}
+PROFISIONAIS = os.path.join(os.path.dirname(__file__), "..", "data", "profissionais.xlsx")
 
 WEBHOOK_URL = "https://hook.us2.make.com/1adv2sv028glhonhwu3n1mxwzn7dgsp6"
 
 HEADERS = {"Content-Type": "application/json",}
+
+CLIENTES_DB = os.path.join(os.path.dirname(__file__), "..", "data", "clientes_db.xlsx")
+
+# Persistir as credenciais.
+ARQ_CREDENCIAIS = os.path.join(os.path.dirname(__file__), "..", "data", "credenciais.txt")
+
+# # Persistir as credenciais.
+ARQ_CHAVE = os.path.join(os.path.dirname(__file__), "..", "data", "chave.key")
