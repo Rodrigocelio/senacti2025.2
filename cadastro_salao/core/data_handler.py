@@ -7,7 +7,8 @@ from rich.panel import Panel
 
 from core.web_integration import (enviar_dados, validar_email)
 from utils.console_tools import (limpar_tela, mostrar_logo_personalizado)
-from utils.supplementation import (CLIENTES_DB, AGENDAMENTOS, PROFISIONAIS)
+from utils.supplementation import (CLIENTES_DB, AGENDAMENTOS, 
+                                   PROFISIONAIS, SERVICOS)
 
 
 console = Console()
@@ -60,7 +61,7 @@ def listar_clientes():
     console.print(Panel("", title=titulo, style="white"))
 
     for n, cliente in enumerate(clientes, 1):
-        console.print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente ['telefone']:<20} | Email: {cliente['email']:<20}",style="red")
+        console.print(f"{n:>4}º -: Nome: {cliente['nome']:<20} | Telefone: {cliente['telefone']:<20} | Email: {cliente['email']:<20}",style="white")
 
 
 def buscar_clientes():
@@ -112,10 +113,10 @@ def _selecionar_profisional(profissionais):
     #prof_id = str(input("\n\n Escolha o ID do profissional: ")).strip()
     prof_id = int(input("\n\n Escolha o ID do profissional: "))
     for profissional in profissionais:
-        if prof_id in profissional:
-            profissional = profissional["nome"]
-            print(f"\n Profissional {profissional.upper()} selecionado.")
-            return profissional
+        if prof_id == profissional["codigo"]:
+            prof_nome = profissional["nome"]
+            print(f"\n Profissional {prof_nome.upper()} selecionado.")
+            return prof_nome
     print(" Opção de profissional inválida. Tente novamente.")
     return
 
@@ -127,16 +128,15 @@ def _selecionar_servico(servicos):
     console.print(Panel("", title="Novo Agendamento", style="white"))
     console.print(Panel("", title="Serviços disponíveis", style="white"))
 
-    #servicos = pd.read_excel(servicos)
+    for servico in servicos:
+        print(f"{servico['codigo']:>4}º -: {servico['nome']:<6} - R${servico['valor']:<6.2f} - ↳ {servico['descricao']:<6}")
 
-    for id, info in servicos.items():
-        print(f"{id:>4}º -: {info['nome']:<6} - R${info['valor']:<6.2f} - ↳ {info['descricao']:<6}")
-
-    opcao = input("\n\n Escolha o ID do serviço: ")
-    if opcao.isdigit() and int(opcao) in servicos:
-        servico_info = servicos[int(opcao)]
-        servico = servico_info["nome"]
-    return (servico, servico_info)
+    op = int(input("\n\n Escolha o ID do serviço: "))
+    for servico in servicos:
+        if op == servico["codigo"]:
+            return servico
+    print(" Opção de serviço inválida. Tente novamente.")
+    return
 
 
 def _coletar_timestamp():
@@ -157,7 +157,7 @@ def _coletar_timestamp():
     return (data, hora, dt)
 
 
-def criar_agendamento(servicos):
+def criar_agendamento():
     """Cria um agendamento de serviço e aciona o envio de e-mail confirmando o 
     agendamento.
     """
@@ -166,6 +166,7 @@ def criar_agendamento(servicos):
     try:
         clientes = _buscar_clientes_DB()
         profissionais = _buscar_profissionais()
+        servicos = _buscar_servicos()
         # Verifica se existe clientes cadastros.
         if not clientes:
             print(" ❌ Nenhum cliente cadastrado. Cadastre antes de agendar.")
@@ -179,7 +180,7 @@ def criar_agendamento(servicos):
         profissional = _selecionar_profisional(profissionais)
 
         # Área de coleta do serviço.
-        servico, servico_info = _selecionar_servico(servicos)
+        servico = _selecionar_servico(servicos)
 
         # Área de coleta da data e hora.
         data, hora, dt = _coletar_timestamp()
@@ -189,9 +190,9 @@ def criar_agendamento(servicos):
             "nome": cliente_selecionado["nome"],
             "email": cliente_selecionado["email"],
             "telefone": cliente_selecionado["telefone"],
-            "servico": servico,
-            "descricao_servico": servico_info["descricao"],
-            "valor_servico": servico_info["valor"],
+            "servico": servico["nome"],
+            "descricao_servico": servico["descricao"],
+            "valor_servico": servico["valor"],
             "profissional": profissional,
             "data": data,
             "hora": hora,
@@ -201,15 +202,14 @@ def criar_agendamento(servicos):
         
         # Registrando agendamento.
         _armazenar_agendamento(agendamento)
-        #agendamentos.append(agendamento)
 
         # Enviar dados do agendamento para o webhook
         enviar_dados(agendamento)
 
-        print(f"\n\n ✅ Agendamento confirmado para {cliente_selecionado['nome']}: {servico} - R${servico_info['valor']:.2f}")
+        print(f"\n\n ✅ Agendamento confirmado para {cliente_selecionado['nome']}: {servico['nome']} - R${servico['valor']:.2f}")
         print(f" 🧔 Profissional: {profissional}")
         print(f" 📅 Data: {data} às {hora}")
-        print(f" 📝 Descrição: {servico_info['descricao']}")
+        print(f" 📝 Descrição: {servico['descricao']}")
     except Exception as erro:
         print(f"Erro ao cadastrar: {erro}")
 
@@ -243,13 +243,14 @@ def buscar_agendamento():
         encontrados = [agendamento for agendamento in agendamentos if agendamento['nome'].lower() == nome.lower()]
         if encontrados:
             for agendamento in encontrados:
-                print(f"\n Cliente: {agendamento["nome"]}")
-                print(f" Telefone: {agendamento["telefone"]}")
-                print(f" Data: {agendamento["data"]}")
-                print(f" Hora: {agendamento["hora"]}")
-                print(f" Barbeiro: {agendamento["profissional"]}")
-                print(f" Servico: {agendamento["servico"]}")
-                print(f" Valor[R$]: {agendamento["valor_servico"]:.2f}")
+                print(f"\n Cliente.: ------- {agendamento["nome"]}")
+                print(f" Telefone.: ------ {agendamento["telefone"]}")
+                print(f" Data.: ---------- {agendamento["data"]}")
+                print(f" Hora.: ---------- {agendamento["hora"]}")
+                print(f" Barbeiro.: ------ {agendamento["profissional"]}")
+                print(f" Servico.: ------- {agendamento["servico"]}")
+                print(f" Valor[R$]: ------ {agendamento["valor_servico"]:.2f}")
+                print("\n ------------------------------------------>")
         else:
             print(" Nenhum agendamento encontrado para esse nome.")
     except Exception as erro:
@@ -274,11 +275,35 @@ def cancelar_agendamento():
 
 def cadastrar_profissional():
     """"""
-    nome = str(input(" Digite o nome do profissional: ")).strip().capitalize()
-    cod = int(input(" Digite o código do profissional: "))
+    try:
+        titulo = "Cadastrar profissional"
+        console.print(Panel("", title=titulo), style="white")
+        nome = str(input(" Digite o nome do profissional: ")).strip().capitalize()
+        cod = int(input(" Digite o código do profissional: "))
     
-    profissional = {"codigo": cod, "nome": nome}
-    _armazenar_profissional(profissional)
+        profissional = {"codigo": cod, "nome": nome}
+        _armazenar_profissional(profissional)
+    except Exception as erro:
+        print(f" Erro ao cadastrar profissional: {erro}")
+   
+    
+def cadastrar_servico():
+    """"""
+    try:
+        titulo = "Cadastrar Serviço"
+        console.print(Panel("", title=titulo), style="white")
+        nome = str(input(" Digite o nome do serviço: ")).strip().capitalize()
+        descricao = str(input(" Digite a descrição do serviço: ")).strip().capitalize()
+        codigo = int(input(" Digite o código do serviço: "))
+        valor = float(input(" Digite o valor do serviço (R$): ").strip())
+    
+        servico = {"codigo": codigo, 
+                   "nome": nome, 
+                   "descricao": descricao, 
+                   "valor": valor}
+        _armazenar_servico(servico)
+    except Exception as erro:
+        print(f" Erro ao cadastrar serviço: {erro}")
 
 
 def _armazenar_clientes_DB(cliente: dict) -> None:
@@ -305,7 +330,7 @@ def _buscar_clientes_DB() -> list:
         clientes = df.to_dict(orient="records")
         return clientes
     except Exception as erro:
-        raise Exception(f"{erro}")
+        raise Exception(f"Erro ao buscar clientes: {erro}")
 
 
 def _armazenar_agendamento(agendamento: dict) -> None:
@@ -319,7 +344,7 @@ def _armazenar_agendamento(agendamento: dict) -> None:
         
         df.to_excel(AGENDAMENTOS, sheet_name="agendamentos", index=False)
     except Exception as erro:
-        raise Exception(f"Erro ao armazenar cliente: {erro}")
+        raise Exception(f"Erro ao armazenar agendamento: {erro}")
 
 
 def _busca_agendamentos():
@@ -332,7 +357,7 @@ def _busca_agendamentos():
         agendamentos = df.to_dict(orient="records")
         return agendamentos
     except Exception as erro:
-        raise Exception(f"{erro}")
+        raise Exception(f"Erro ao buscar agendamentos: {erro}")
     
     
 def _armazenar_profissional(profissional: dict) -> None:
@@ -346,7 +371,7 @@ def _armazenar_profissional(profissional: dict) -> None:
         
         df.to_excel(PROFISIONAIS, sheet_name="profissionais", index=False)
     except Exception as erro:
-        raise Exception(f"Erro ao armazenar cliente: {erro}")
+        raise Exception(f"Erro ao armazenar profissional: {erro}")
 
 
 def _buscar_profissionais() -> dict:
@@ -359,4 +384,31 @@ def _buscar_profissionais() -> dict:
         profissionais = df.to_dict(orient="records")
         return profissionais
     except Exception as erro:
-        raise Exception(f"{erro}")
+        raise Exception(f"Erro ao buscar profissionais: {erro}")
+    
+
+def _armazenar_servico(servico: dict) -> None:
+    """"""
+    try:
+        if os.path.exists(SERVICOS):
+            df = pd.read_excel(SERVICOS, sheet_name="servicos")
+            df = pd.concat([df, pd.DataFrame([servico])], ignore_index=True)
+        else:
+            df = pd.DataFrame([servico])
+        
+        df.to_excel(SERVICOS, sheet_name="servicos", index=False)
+    except Exception as erro:
+        raise Exception(f"Erro ao armazenar serviço: {erro}")
+
+
+def _buscar_servicos():
+    """"""
+    try:
+        if not os.path.exists(SERVICOS):
+            return []
+        
+        df = pd.read_excel(SERVICOS, sheet_name="servicos")
+        servicos = df.to_dict(orient="records")
+        return servicos
+    except Exception as erro:
+        raise Exception(f"Erro ao buscar serviços: {erro}")

@@ -56,7 +56,7 @@ def solicitar_login():
 
 def mostrar_menu():
     """Cria e imprime um menu formatado com a biblioteca Rich."""
-    menu = """\n1. Cadastrar cliente\n2. Listar clientes\n3. Buscar cliente por nome\n4. Agendamento\n5. Ver agendamentos\n6. Buscar agendamento\n7. Cancelar agendamento\n8. Cadastrar Administrador\n9. Sair"""
+    menu = """\n[01] Cadastrar cliente\n[02] Listar clientes\n[03] Buscar cliente\n[04] Agendamento\n[05] Listar agendamentos\n[06] Buscar agendamento\n[07] Cancelar agendamento\n[08] Cadastrar adm\n[09] Cadastrar profissional\n[10] Cadastrar serviço\n[ 0] Fechar"""
 
-    painel = Panel.fit(menu, title="=== Sistema de Cadastro de Clientes - Barbearia ===")
-    console.print(painel, style="white", justify="left")
+    titulo = "-" * 10 + " Sistema de Cadastro de Clientes - Barbearia " + "-" * 10
+    console.print(Panel.fit(menu, title=titulo), style="white", justify="left")

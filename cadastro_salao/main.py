@@ -1,6 +1,6 @@
 from time import sleep
-from rich import print
 from rich.panel import Panel
+from rich.console import Console
 
 from utils.console_tools import (limpar_tela, mostrar_logo_personalizado,
                                  mostrar_barra_carregamento, solicitar_login, 
@@ -9,25 +9,25 @@ from utils.console_tools import (limpar_tela, mostrar_logo_personalizado,
 from utils.security import (logar, cadastrar_adm)
 
 from core.data_handler import (cadastrar_cliente, buscar_clientes, 
-                               listar_clientes, cadastrar_profissional)
+                               listar_clientes, cadastrar_profissional,
+                               cadastrar_servico)
 
 from core.data_handler import (criar_agendamento, buscar_agendamento, 
-                               listar_agendamentos, cancelar_agendamento, _armazenar_clientes_DB)
+                               listar_agendamentos, cancelar_agendamento)
 
-from utils.supplementation import (PROFISIONAIS, SERVICOS)
+
+console = Console()
 
 
 def main():
     """Fluxo de execução de todo sistema."""    
-    clientes = [] # -> Trocar por um dateframe.
-    agendamentos = []
-
+    
     mostrar_barra_carregamento()
     
     # login
     while True:
         mostrar_logo_personalizado()
-        print(Panel("", title="Login", style="white"))
+        console.print(Panel("", title="Login", style="white"))
         # verifica se login é válido.
         # TODO: veriricar se funciona sem a comparação.
         usuario, senha = solicitar_login()
@@ -45,7 +45,7 @@ def main():
         mostrar_logo_personalizado()
         mostrar_menu()
         try:
-            opt = str(input(" >>> "))
+            opt = str(input(" O que deseja fazer?  "))
         # Encerra o programa de forma elegante caso o usuário 
         # tecle 'ctrl + c'.
         except KeyboardInterrupt:
@@ -83,7 +83,7 @@ def main():
             case "4":
                 limpar_tela()
                 mostrar_logo_personalizado()
-                criar_agendamento(SERVICOS)
+                criar_agendamento()
                 sleep(3)
             case "5":
                 limpar_tela()
@@ -122,8 +122,12 @@ def main():
                 limpar_tela()
                 mostrar_logo_personalizado()
                 cadastrar_profissional()
-            # Encerra o programa.
             case "10":
+                limpar_tela()
+                mostrar_logo_personalizado()
+                cadastrar_servico()
+            # Encerra o programa.
+            case "0":
                 print("\n Encerando o programa...")
                 sleep(1.5)
                 break
