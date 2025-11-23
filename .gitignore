@@ -5,6 +5,7 @@ cadastro_salao/credenciais.txt
 # Ignorar todas as chaves e arquivos de credenciais por segurança
 *.key
 credenciais.txt
+*.xlsx
 
 # Python
 __pycache__/
