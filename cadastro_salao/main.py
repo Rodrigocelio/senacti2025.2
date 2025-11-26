@@ -12,6 +12,8 @@ from core.data_handler import (cadastrar_cliente, buscar_clientes,
                                listar_clientes, cadastrar_profissional,
                                cadastrar_servico)
 
+from core.app import executar_servidor
+
 from core.data_handler import (criar_agendamento, buscar_agendamento, 
                                listar_agendamentos, cancelar_agendamento)
 
@@ -28,8 +30,7 @@ def main():
     while True:
         mostrar_logo_personalizado()
         console.print(Panel("", title="Login", style="white"))
-        # verifica se login é válido.
-        # TODO: veriricar se funciona sem a comparação.
+        # verifica se as credenciais são válidas.
         usuario, senha = solicitar_login()
         if logar(usuario, senha):
             print("\n Entrando...")
@@ -107,10 +108,7 @@ def main():
                 limpar_tela()
                 mostrar_logo_personalizado()
                 cancelar_agendamento()
-                # Congela a tela até que o usuário digite alguma coisa
-                if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
-                    limpar_tela()
-                    continue
+                sleep(3)
             # Cadastro um adm no sistema.
             case "8":
                 limpar_tela()
@@ -126,6 +124,8 @@ def main():
                 limpar_tela()
                 mostrar_logo_personalizado()
                 cadastrar_servico()
+            case "11":
+                executar_servidor()
             # Encerra o programa.
             case "0":
                 print("\n Encerando o programa...")

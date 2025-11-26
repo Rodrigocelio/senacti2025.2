@@ -228,7 +228,7 @@ def listar_agendamentos():
             hora = ag.get('hora', (ag.get('datetime','')[11:16] if ag.get
             ('datetime') else '-'))
 
-            print(f"{i:>4}º -: Cliente: {ag['nome']:<6} | Serviço: {ag['servico']:<6} | Profissional: {ag['profissional']:<6} | Valor: R${ag['valor_servico']:<6.2f} | Data: {data} - {hora}")
+            print(f"{i:>4}º -: Cliente: {ag['nome']:<18} | Serviço: {ag['servico']:<20} | Profissional: {ag['profissional']:<15} | Valor: R${ag['valor_servico']:<10.2f} | Data: {data} - {hora}")
     except Exception as erro:
         print(f" Ocorreu um erro ao listar os agendamentos: {erro}")
 
@@ -261,16 +261,23 @@ def cancelar_agendamento():
   """Cancela um agendamento informado por um administrador."""
   console.print(Panel("", title="Cancelar Agendamento", style="white"))
   try:
-      agendamentos = _busca_agendamentos()
-      nome = str(input(" Digite o nome do cliente: "))
-      for i, agendamento in enumerate(agendamentos):
-          if agendamento["nome"].lower() == nome.lower():
-              cancelado = agendamentos.pop(i)
-              print(f'\n\n Agendamento com {cancelado['nome']} foi cancelado.')
-              return
-      print(" Agendamento não encontrado.")
+      if not os.path.exists(AGENDAMENTOS):
+          print(" Nenhum agendamento encontrado.")
+          return
+
+      nome_cliente = str(input(" Digite o nome do cliente: "))
+      df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+      df_atualizado = df[~(df['nome'].str.lower() == nome_cliente.lower())]
+      
+      if len(df) == len(df_atualizado):
+        print(" Agendamento não encontrado.")
+        return
+    
+      df_atualizado.to_excel(AGENDAMENTOS, sheet_name="agendamentos", index=False)
+      print("\n Agendamento cancelado com sucesso.")
+      return
   except Exception as erro:
-        print(f" Erro ao cancelar: {erro}")
+      print(f" Erro ao cancelar agendamento: {erro}")
         
 
 def cadastrar_profissional():
@@ -292,6 +299,7 @@ def cadastrar_servico():
     try:
         titulo = "Cadastrar Serviço"
         console.print(Panel("", title=titulo), style="white")
+        
         nome = str(input(" Digite o nome do serviço: ")).strip().capitalize()
         descricao = str(input(" Digite a descrição do serviço: ")).strip().capitalize()
         codigo = int(input(" Digite o código do serviço: "))
@@ -348,7 +356,11 @@ def _armazenar_agendamento(agendamento: dict) -> None:
 
 
 def _busca_agendamentos():
-    """"""
+    """Busca o arquivo "agendamentos.xslx" com os dados tabulares dos 
+    agendamentos e retorna uma lista de dicionários.
+    Cada dicionário é um agendamento específico contendo as seguintes chaves:
+    nome, telefone, data, hora, profissional, servico, valor_servico.
+    """
     try:
         if not os.path.exists(AGENDAMENTOS):
             return []
@@ -375,7 +387,10 @@ def _armazenar_profissional(profissional: dict) -> None:
 
 
 def _buscar_profissionais() -> dict:
-    """"""
+    """Busca o arquivo "profissionais.xslx" com os dados tabulares dos profissionais e retorna uma lista de dicionários.
+    Cada dicionário é um profisional específico contendo as seguintes chaves:
+    codigo, nome.
+    """
     try:
         if not os.path.exists(PROFISIONAIS):
             return []
@@ -402,7 +417,11 @@ def _armazenar_servico(servico: dict) -> None:
 
 
 def _buscar_servicos():
-    """"""
+    """Busca o arquivo "servicos.xslx" com os dados tabulares dos serviços e 
+    retorna uma lista de dicionários.
+    Cada dicionário é um serviço específico contendo as seguintes chaves:
+    nome, descricao, codigo, valor.
+    """
     try:
         if not os.path.exists(SERVICOS):
             return []
@@ -412,3 +431,4 @@ def _buscar_servicos():
         return servicos
     except Exception as erro:
         raise Exception(f"Erro ao buscar serviços: {erro}")
+

@@ -48,7 +48,9 @@ def _descriptografar_credenciais(credenciais):
 
 
 def cadastrar_adm(usuario, senha):
-    """Cadastra um novo administrador ao sistema."""
+    """Cadastra um novo administrador ao sistema, adicionando o nome de usuário 
+    e senha criptografados ao arquivo "credenciais.txt".
+    """
     if os.path.exists(ARQ_CREDENCIAIS):
         # Formata para o padrão desejado.
         usuario = f"-{usuario}\n"
@@ -68,7 +70,12 @@ def cadastrar_adm(usuario, senha):
 
 
 def buscar_credenciais_registradas():
-    """"""
+    """Busca as credenciais criptografadas no arquivo "credenciais.txt", 
+    descriptografa e armazena em um dicionário de listas.
+    
+    O primeiro item da lista da chave "usuarios" faz par com o primeiro item da 
+    lista da cheve "senhas".
+    """
     adms = {'usuarios': [], 'senhas': []}
     try:
         if not os.path.exists(ARQ_CREDENCIAIS):
@@ -90,7 +97,8 @@ def buscar_credenciais_registradas():
                     # Pula e continua.
                     continue
 
-                # O texto pode conter múltiplas linhas; processa cada uma
+                # O texto pode conter múltiplas linhas.
+                # Processa cada uma.
                 for linha in token.splitlines():
                     if linha.startswith("-"):
                         adms['usuarios'].append(linha.removeprefix("-"))
