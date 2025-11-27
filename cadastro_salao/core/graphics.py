@@ -26,7 +26,7 @@ def gerar_grafico_servico_mais_procurado():
     
         fig, ax = plt.subplots(figsize=(8, 6))
         sns.barplot(x=servico_mais_procurado.index, y=servico_mais_procurado.values, palette="viridis", ax=ax)
-        ax.set_title('Gráfico de Serviço Mais Procurado')
+        ax.set_title('Serviço Mais Procurado')
         ax.set_xlabel('Serviços')
         ax.set_ylabel('Quantidade')
         
@@ -60,7 +60,7 @@ def gerar_grafico_profissional_mais_procurado():
     
         fig, ax = plt.subplots(figsize=(8, 6))
         sns.barplot(x=profissional_mais_procurado.index, y=profissional_mais_procurado.values, palette="viridis", ax=ax)
-        ax.set_title('Gráfico de Profissionais Mais Procurados')
+        ax.set_title('Profissional Mais Procurado')
         ax.set_xlabel('Profissionais')
         ax.set_ylabel('Quantidade')
         

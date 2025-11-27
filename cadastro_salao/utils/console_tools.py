@@ -54,9 +54,20 @@ def solicitar_login():
     return usuario, senha
 
 
-def mostrar_menu():
-    """Cria e imprime um menu formatado com a biblioteca Rich."""
-    menu = """\n[01] Cadastrar cliente\n[02] Listar clientes\n[03] Buscar cliente\n[04] Agendamento\n[05] Listar agendamentos\n[06] Buscar agendamento\n[07] Cancelar agendamento\n[08] Cadastrar adm\n[09] Cadastrar profissional\n[10] Cadastrar serviço\n[ 0] Fechar"""
+def mostrar_menu_principal():
+    """Cria e imprime um menu formatado com a biblioteca Rich. Esse é o menu principal do programa.
+    """
+    menu = """\n[01] Cadastrar cliente\n[02] Listar clientes\n[03] Buscar cliente\n[04] Agendamento\n[05] Listar agendamentos\n[06] Buscar agendamento\n[07] Cancelar agendamento\n[08] Cadastrar adm\n[09] Cadastrar profissional\n[10] Cadastrar serviço\n[11] Relatórios\n[ 0] Fechar"""
 
     titulo = "-" * 10 + " Sistema de Cadastro de Clientes - Barbearia " + "-" * 10
     console.print(Panel.fit(menu, title=titulo), style="white", justify="left")
+
+
+def mostrar_menu_relatorios():
+    """Cria e imprime um menu formatado com a biblioteca Rich. Esse é o menu secundário do programa.
+    """
+    menu = """\n[01] Horário com maior demanda\n[02] Variabilidade dos valores dos serviços\n[03] Tendência central dos valores dos serviços\n[04] Profissional mais procurado\n[05] Serviço mais procurado\n[06] Exibir Dashboard de gráficos\n[ 0] Voltar"""
+
+    titulo = "-" * 23 + " Menu de Relatórios " + "-" * 22
+    console.print(Panel.fit(menu, title=titulo), style="white", justify="left")
+    

@@ -432,3 +432,37 @@ def _buscar_servicos():
     except Exception as erro:
         raise Exception(f"Erro ao buscar serviços: {erro}")
 
+
+def mostrar_horario_com_maior_demada():
+    """"""
+    df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+    hora_maior_demanda = df['hora'].mode()[0]
+    console.print(f"\n O horário com maior demanda é: {hora_maior_demanda} horas (moda)", style="red")
+
+
+def mostrar_variabilidade_dos_valores_dos_servicos():
+    """"""
+    df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+    variabilidade = df['valor_servico'].std()
+    console.print(f"\n A variabilidade dos valores dos serviços é: {variabilidade:.2f} (desvio padrão)", style="red")
+    
+
+def mostrar_tendencia_central_dos_valores_dos_servicos():
+    """"""
+    df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+    tendencia_central = df['valor_servico'].median()
+    console.print(f"\n A tendência central dos valores dos serviços é: {tendencia_central:.2f} (mediana)", style="red")
+
+
+def mostrar_profissionai_mais_procurado():
+    """"""
+    df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+    profissional_mais_procurado = df['profissional'].value_counts().idxmax()
+    console.print(f"\n O profissional mais procurado foi: {profissional_mais_procurado}", style="red")
+
+
+def mostrar_servico_mais_procurado():
+    """"""
+    df = pd.read_excel(AGENDAMENTOS, sheet_name="agendamentos")
+    servico_mais_procurado = df['servico'].value_counts().idxmax()
+    console.print(f"\n O serviço mais procurado foi: {servico_mais_procurado}", style="red")

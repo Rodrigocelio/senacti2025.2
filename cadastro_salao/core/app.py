@@ -25,12 +25,13 @@ def plotar_graficos():
 
 
 def abrir_navegador():
-    """Inicia o servidor Flask em background e abre o navegador."""
-    # inicia o servidor numa thread separada
+    """Inicia o servidor Flask e abre o navegador em background."""
     time.sleep(2)  # espera o servidor iniciar
     webbrowser.open_new('http://127.0.0.1:5000')
     
     
 def executar_servidor():
+    """Crie uma thread para abrir o navegador e inicia o servidor Flask. Isso é necessário, porque caso o navegador seja aberto na thread principal, o servidor Flask não iniciará corretamente (vai apresentar problemas).
+    """
     Thread(target=abrir_navegador).start()
     app.run(debug=True, use_reloader=False)

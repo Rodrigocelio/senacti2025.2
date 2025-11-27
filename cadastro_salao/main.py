@@ -4,13 +4,19 @@ from rich.console import Console
 
 from utils.console_tools import (limpar_tela, mostrar_logo_personalizado,
                                  mostrar_barra_carregamento, solicitar_login, 
-                                 mostrar_menu)
+                                 mostrar_menu_principal, 
+                                 mostrar_menu_relatorios)
 
 from utils.security import (logar, cadastrar_adm)
 
 from core.data_handler import (cadastrar_cliente, buscar_clientes, 
                                listar_clientes, cadastrar_profissional,
                                cadastrar_servico)
+
+from core.data_handler import (mostrar_horario_com_maior_demada,
+                               mostrar_variabilidade_dos_valores_dos_servicos,
+                               mostrar_tendencia_central_dos_valores_dos_servicos, mostrar_profissionai_mais_procurado,
+                               mostrar_servico_mais_procurado) 
 
 from core.app import executar_servidor
 
@@ -44,7 +50,7 @@ def main():
     # loop principal
     while True:
         mostrar_logo_personalizado()
-        mostrar_menu()
+        mostrar_menu_principal()
         try:
             opt = str(input(" O que deseja fazer?  "))
         # Encerra o programa de forma elegante caso o usuário 
@@ -120,12 +126,56 @@ def main():
                 limpar_tela()
                 mostrar_logo_personalizado()
                 cadastrar_profissional()
+            # Cadastra um novo serviço.
             case "10":
                 limpar_tela()
                 mostrar_logo_personalizado()
                 cadastrar_servico()
+            # Mostra o menu de relatórios.
             case "11":
-                executar_servidor()
+                limpar_tela()
+                mostrar_logo_personalizado()
+                mostrar_menu_relatorios()
+                try:
+                    opt2 = str(input(" O que deseja fazer?  "))
+                    # Encerra o programa de forma elegante caso o usuário 
+                    # tecle 'ctrl + c'.
+                except KeyboardInterrupt:
+                    print("\n Encerando o programa...")
+                    sleep(1.5)
+                    print("\n Programa interrupido abruptamente.")
+                    print(" Por favor execute novamente.")
+                    break
+                match opt2:
+                    case "1":
+                        mostrar_horario_com_maior_demada()
+                        if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
+                            limpar_tela()
+                            continue
+                    case "2":
+                        mostrar_variabilidade_dos_valores_dos_servicos()
+                        if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
+                            limpar_tela()
+                            continue
+                    case "3":
+                        mostrar_tendencia_central_dos_valores_dos_servicos()
+                        if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
+                            limpar_tela()
+                            continue
+                    case "4":
+                        mostrar_profissionai_mais_procurado()
+                        if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
+                            limpar_tela()
+                            continue
+                    case "5":
+                        mostrar_servico_mais_procurado()
+                        if type(input("\n\n\n Aperte 'ENTER' para voltar: ")) == str:
+                            limpar_tela()
+                            continue
+                    case "6":
+                        executar_servidor()
+                    case "0":
+                        continue
             # Encerra o programa.
             case "0":
                 print("\n Encerando o programa...")
