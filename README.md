@@ -71,25 +71,55 @@ O projeto segue uma identidade visual **premium e sofisticada**:
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend
-- **Python 3.x** - Linguagem principal
-- **urllib** - Requisições HTTP
-- **json** - Manipulação de dados
-- **datetime** - Validação de datas
+- **Python 3.x** - Linguagem principal do sistema.
+- **`urllib`** - Utilizado para realizar requisições HTTP POST para o webhook, enviando dados para automação de emails.
+- **`json`** - Responsável pela serialização de dados Python para o formato JSON, usado no envio de informações via webhook.
+- **`datetime`** - Empregado para manipulação de datas e horas, incluindo a validação de agendamentos e formatação para o webhook.
+- **`pandas`** - Biblioteca essencial para a manipulação e persistência de dados em arquivos Excel, atuando como o "banco de dados" do sistema.
+- **`Flask`** - Microframework web utilizado para criar o servidor local que renderiza templates HTML e exibe relatórios e gráficos.
+- **`rich`** - Usado para enriquecer a experiência do usuário no terminal, proporcionando uma interface de linha de comando mais atraente e informativa.
+- **`matplotlib` e `seaborn`** - Bibliotecas de visualização de dados empregadas para gerar gráficos e relatórios visuais no sistema.
+- **`cryptography`** - Utilizada para implementar funcionalidades de segurança, como criptografia de dados sensíveis.
+- **`pyfiglet`** - Gera arte ASCII para estilizar elementos visuais no console.
+- **`webbrowser`** - Permite abrir links diretamente no navegador padrão do usuário, facilitando o acesso a URLs importantes.
+- **`threading`** - Utilizado para executar tarefas assíncronas, como o envio de emails via webhook, sem bloquear a interface do usuário.
+- **`io`** - Fornece ferramentas para manipulação de fluxos de dados em memória, útil para operações de leitura e escrita de arquivos temporários.
+- **`os`** - Usado para interações com o sistema operacional, como manipulação de arquivos e diretórios.
+- **`base64`** - Implementa codificação e decodificação de dados em base64, útil para transmissão segura de informações.
+- **`re`** - Biblioteca de expressões regulares para validação e manipulação de strings, como validação de emails e telefones.
+- **`getpass`** - Utilizada para entrada segura de senhas no console, ocultando a digitação do usuário.
+- **`time`** - Fornece funcionalidades relacionadas ao tempo, como pausas e delays em operações.
+- **`seaborn`** - Biblioteca de visualização de dados baseada em Matplotlib, usada para criar gráficos estatísticos atraentes.
+- **`fernet`** - Biblioteca para criptografia simétrica, garantindo a segurança dos dados sensíveis.
+
 
 ### Frontend (Templates)
-- **HTML5** - Estrutura dos emails
-- **CSS3 Inline** - Estilização
-- **Tailwind CSS** - Guia de estilo interativo
+- **HTML5** - Usado para a estruturação básica dos templates de email e de relatórios HTML gerados pelo sistema.
+- **CSS3 (Internal Stylesheet)** - Estilização dos templates HTML, com estilos definidos em blocos `<style>` dentro dos arquivos.
 
 ### Automação
-- **Webhook** - Integração para envio de emails
+- **Webhook** - Mecanismo de integração para o envio automático e assíncrono de emails de boas-vindas e confirmação de agendamento.
 
 ---
 
 ## 📦 Pré-requisitos
 
-- Python 3.7 ou superior
-- Conexão com internet (para envio via webhook)
+- **Python 3.7 ou superior**
+- **Conexão com internet** (para envio via webhook)
+
+### Dependências Externas
+
+As seguintes bibliotecas Python devem ser instaladas:
+
+```
+pandas>=1.3.0
+Flask>=2.0.0
+rich>=10.0.0
+matplotlib>=3.4.0
+seaborn>=0.11.0
+cryptography>=3.4.0
+pyfiglet>=0.8.0
+```
 
 ---
 
@@ -110,20 +140,34 @@ python --version
 python3 --version
 ```
 
-### 3. Configure o Webhook
-
-Edite o arquivo `barbearia.py` e substitua a URL do webhook na linha 13:
-
-```python
-webhook_url = "SUA_URL_DO_WEBHOOK_AQUI"
-```
-
-### 4. Execute o sistema
+### 3. Instale as dependências
 
 ```bash
-python barbearia.py
+pip install -r requirements.txt
 # ou
-python3 barbearia.py
+pip3 install -r requirements.txt
+```
+
+Alternativamente, instale manualmente:
+
+```bash
+pip install pandas Flask rich matplotlib seaborn cryptography pyfiglet
+```
+
+### 4. Configure o Webhook
+
+Edite o arquivo `utils/supplementation.py` e substitua a URL do webhook:
+
+```python
+WEBHOOK_URL = "SUA_URL_DO_WEBHOOK_AQUI"
+```
+
+### 5. Execute o sistema
+
+```bash
+python main.py
+# ou
+python3 main.py
 ```
 
 ---
@@ -220,19 +264,30 @@ Digite o horário do agendamento (HH:MM, 24h): 14:30
 ## 📁 Estrutura do Projeto
 
 ```
-barberback/
-├── barbearia.py                    # Sistema principal
+cadastro_salao/
+├── main.py                         # Ponto de entrada da aplicação
 ├── README.md                       # Este arquivo
-├── emails/
-│   ├── boas-vindas.html           # Template de boas-vindas
-│   └── confirmacao-agendamento.html # Template de confirmação
-├── assets/
-│   ├── white_logo.png             # Logo branca (fundo escuro)
-│   ├── dark_logo.png              # Logo escura (fundo claro)
-│   ├── header_image.png           # Imagem hero
-│   └── interior_barbearia.png     # Foto da barbearia
-└── style-guide/
-    └── guia-estilo.html           # Guia de estilo interativo
+├── core/
+│   ├── app.py                      # Lógica principal da aplicação
+│   ├── data_handler.py             # Manipulação dos dados (Excel)
+│   ├── graphics.py                 # Funções de interface gráfica/console
+│   ├── web_integration.py          # Integração com webhook
+│   └── templates/
+│       └── index.html              # Template base para emails
+├── data/
+│   ├── agendamentos.xlsx           # Banco de dados de agendamentos
+│   ├── clientes_db.xlsx            # Banco de dados de clientes
+│   ├── profissionais.xlsx          # Banco de dados de profissionais
+│   └── servicos.xlsx               # Banco de dados de serviços
+├── executable/
+│   ├── Linux/
+│   │   └── BarberBack              # Executável para Linux
+│   └── Windows/
+│       └── BarberBack.exe          # Executável para Windows
+└── utils/
+    ├── console_tools.py            # Ferramentas de console
+    ├── security.py                 # Funções de segurança
+    └── supplementation.py          # Funções suplementares
 ```
 
 ---
